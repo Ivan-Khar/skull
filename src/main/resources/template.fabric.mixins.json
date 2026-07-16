@@ -1,0 +1,10 @@
+{
+    "package": "one.theaq.template.platform.fabric.mixin",
+    "required": true,
+    "minVersion": "0.8",
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "compatibilityLevel": "JAVA_17",
+    "plugin": "one.theaq.template.MixinConfigPlugin"
+}

@@ -1,0 +1,25 @@
+modLoader = "kotlinforforge"
+loaderVersion = "[1,)"
+issueTrackerURL = "https://github.com/Ivan-Khar/${mod_name}/issues"
+license = "${mod_license}"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+logoFile = "assets/${mod_id}/logo.png"
+description = '''${mod_description}'''
+authors = "${mod_author}"
+
+[[accessTransformers]]
+file = "${minecraft_version}-accesstransformer.cfg"
+
+[[dependencies.${ mod_id }]]
+modId = "neoforge"
+type = "required"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ mod_id }]]
+modId = "minecraft"
+type = "required"
