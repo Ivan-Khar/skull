@@ -27,6 +27,12 @@
                 "adapter": "kotlin",
                 "value": "one.theaq.skull.client.platform.fabric.FabricClientEntrypoint"
             }
+        ],
+        "fabric-datagen": [
+            {
+                "adapter": "kotlin",
+                "value": "one.theaq.skull.data.MainDatagen"
+            }
         ]
     },
     "accessWidener": "${minecraft_version}.accesswidener",
