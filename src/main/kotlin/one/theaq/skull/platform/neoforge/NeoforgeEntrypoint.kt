@@ -1,5 +1,5 @@
 //? if neoforge {
-package one.theaq.skull.platform.neoforge
+/*package one.theaq.skull.platform.neoforge
 
 import net.neoforged.fml.common.Mod
 import one.theaq.skull.Main
@@ -10,4 +10,4 @@ class NeoforgeEntrypoint {
         Main.initialize()
     }
 }
-//?}
+*///?}

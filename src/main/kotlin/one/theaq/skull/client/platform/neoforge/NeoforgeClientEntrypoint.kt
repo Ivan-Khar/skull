@@ -1,5 +1,5 @@
 //? if neoforge {
-package one.theaq.skull.client.platform.neoforge
+/*package one.theaq.skull.client.platform.neoforge
 
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.common.Mod
@@ -12,4 +12,4 @@ class NeoforgeClientEntrypoint {
         MainClient.initialize()
     }
 }
-//?}
+*///?}

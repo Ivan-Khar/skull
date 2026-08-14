@@ -6,7 +6,7 @@ plugins {
     id("net.neoforged.moddev") version "2.0.141" apply false
 }
 
-stonecutter active "26.2-neoforge"
+stonecutter active "26.2-fabric"
 
 stonecutter parameters {
     constants.match(node.metadata.project.substringAfterLast('-'), "fabric", "neoforge")
