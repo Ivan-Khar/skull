@@ -1,6 +1,6 @@
 modLoader = "kotlinforforge"
 loaderVersion = "[1,)"
-issueTrackerURL = "https://github.com/Ivan-Khar/${mod_name}/issues"
+issueTrackerURL = "https://github.com/Ivan-Khar/${mod_id}/issues"
 license = "${mod_license}"
 
 [[mods]]

@@ -3,7 +3,7 @@ package one.theaq.skull.platform
 import java.nio.file.Path
 
 //? if fabric {
-import net.fabricmc.loader.api.FabricLoader
+/*import net.fabricmc.loader.api.FabricLoader
 
 object Platform {
     fun isModLoaded(modId: String): Boolean {
@@ -16,9 +16,9 @@ object Platform {
     val debugDirectory: Path
         get() = FabricLoader.getInstance().getConfigDir().getParent().resolve(".template_debug")
 }
-//?} else if neoforge {
+*///?} else if neoforge {
 
-/*import net.neoforged.fml.ModList
+import net.neoforged.fml.ModList
 import net.neoforged.fml.loading.FMLLoader
 import net.neoforged.fml.loading.LoadingModList
 
@@ -58,4 +58,4 @@ object Platform {
     *///?}
 }
 
-*///?}
+//?}

@@ -1,15 +1,15 @@
 //? if neoforge {
-/*package one.theaq.skull.client.platform.neoforge
+package one.theaq.skull.client.platform.neoforge
 
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.common.Mod
-import one.theaq.skull.Template
-import one.theaq.skull.client.TemplateClient
+import one.theaq.skull.Main
+import one.theaq.skull.client.MainClient
 
-@Mod(Template.MOD_ID, dist = [Dist.CLIENT])
+@Mod(Main.MOD_ID, dist = [Dist.CLIENT])
 class NeoforgeClientEntrypoint {
     init {
-        TemplateClient.initialize()
+        MainClient.initialize()
     }
 }
-*///?}
+//?}

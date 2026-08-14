@@ -1,13 +1,13 @@
 //? if neoforge {
-/*package one.theaq.skull.platform.neoforge
+package one.theaq.skull.platform.neoforge
 
 import net.neoforged.fml.common.Mod
-import one.theaq.skull.Template
+import one.theaq.skull.Main
 
-@Mod(Template.MOD_ID)
+@Mod(Main.MOD_ID)
 class NeoforgeEntrypoint {
     init {
-        Template.initialize()
+        Main.initialize()
     }
 }
-*///?}
+//?}
