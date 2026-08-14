@@ -22,7 +22,7 @@ stonecutter {
                     "build.$it${if (deobfuscated && it == "fabric") "-deobf" else ""}.gradle.kts"
             }
 
-        mc("1.21.1", loaders = listOf("fabric", "neoforge"))
+        //mc("1.21.1", loaders = listOf("fabric", "neoforge"))
         mc("26.2", deobfuscated = true, loaders = listOf("fabric", "neoforge"))
 
         vcsVersion = "26.2-fabric"
@@ -63,4 +63,4 @@ gradle.beforeProject {
     }
 }
 
-rootProject.name = "Template"
+rootProject.name = "Skull"

@@ -19,13 +19,13 @@
         "main": [
             {
                 "adapter": "kotlin",
-                "value": "one.theaq.template.platform.fabric.FabricEntrypoint"
+                "value": "one.theaq.skull.platform.fabric.FabricEntrypoint"
             }
         ],
         "client": [
             {
                 "adapter": "kotlin",
-                "value": "one.theaq.template.client.platform.fabric.FabricClientEntrypoint"
+                "value": "one.theaq.skull.client.platform.fabric.FabricClientEntrypoint"
             }
         ]
     },

@@ -3,11 +3,11 @@
 import dev.kikugie.fletching_table.annotation.MixinEnvironment
 import org.gradle.kotlin.dsl.mappings
 import org.gradle.kotlin.dsl.remapJar
-import template.utils.*
+import multiloader.utils.*
 
 plugins {
     kotlin("jvm")
-    id("template.common")
+    id("multiloader.common")
     id("fabric-loom")
     id("com.google.devtools.ksp") version "2.3.9"
     id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
@@ -68,7 +68,7 @@ loom {
         configureDataGeneration {
             createRunConfiguration = true
             client = true
-            modId = "template"
+            modId = "skull"
         }
 
         configureTests {
@@ -122,11 +122,11 @@ fletchingTable {
     }
 
     mixins.register("main") {
-        mixin("default", "template.mixins.json")
-        mixin("client", "template.client.mixins.json") {
+        mixin("default", "skull.mixins.json")
+        mixin("client", "skull.client.mixins.json") {
             environment = MixinEnvironment.Env.CLIENT
         }
-        mixin("fabric", "template.fabric.mixins.json")
+        mixin("fabric", "skull.fabric.mixins.json")
     }
 }
 
@@ -154,7 +154,7 @@ tasks {
 
 buildConfig {
     className("TemplateConstants")
-    packageName("one.theaq.template")
+    packageName("one.theaq.skull")
     useJavaOutput()
 
     buildConfigField("String", "MINECRAFT_VERSION", "\"$minecraft\"")
