@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 
 class MixinConfigPlugin : IMixinConfigPlugin {
     override fun onLoad(mixinPackage: String) {
+
     }
 
     override fun getRefMapperConfig(): String? {
@@ -27,6 +28,7 @@ class MixinConfigPlugin : IMixinConfigPlugin {
         myTargets: Set<String>,
         otherTargets: Set<String>
     ) {
+
     }
 
     override fun getMixins(): List<String>? {
@@ -39,6 +41,7 @@ class MixinConfigPlugin : IMixinConfigPlugin {
         mixinClassName: String,
         mixinInfo: IMixinInfo
     ) {
+
     }
 
     override fun postApply(
@@ -47,5 +50,6 @@ class MixinConfigPlugin : IMixinConfigPlugin {
         mixinClassName: String,
         mixinInfo: IMixinInfo
     ) {
+
     }
 }

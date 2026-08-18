@@ -10,11 +10,9 @@ object Platform {
         return FabricLoader.getInstance().isModLoaded(modId)
     }
 
-    val isDev: Boolean
-        get() = FabricLoader.getInstance().isDevelopmentEnvironment()
+    val isDev: Boolean = FabricLoader.getInstance().isDevelopmentEnvironment
 
-    val debugDirectory: Path
-        get() = FabricLoader.getInstance().getConfigDir().getParent().resolve(".template_debug")
+    val debugDirectory: Path = FabricLoader.getInstance().configDir.parent.resolve(".template_debug")
 }
 //?} else if neoforge {
 
@@ -29,7 +27,7 @@ object Platform {
             return modList.isLoaded(modId)
         }
         //? if >=1.21.10 {
-        val loadingModList = FMLLoader.getCurrent().getLoadingModList()
+        val loadingModList = FMLLoader.getCurrent().loadingModList
         //?} else {
         /*val loadingModList = LoadingModList.get()
         *///?}
@@ -49,11 +47,11 @@ object Platform {
     }
     //?} else {
     /*fun isDev(): Boolean {
-        return !FMLLoader.isProduction()
+        return !FMLLoader.isProduction
     }
 
     fun getDebugDirectory(): Path {
-        return FMLLoader.getGamePath().resolve(".template_debug")
+        return FMLLoader.gamePath.resolve(".template_debug")
     }
     *///?}
 }
