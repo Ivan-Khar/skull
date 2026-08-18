@@ -6,6 +6,7 @@ import one.theaq.skull.Main
 
 object FabricEntrypoint : ModInitializer {
     override fun onInitialize() {
+        FabricEvents()
         Main.initialize()
     }
 }

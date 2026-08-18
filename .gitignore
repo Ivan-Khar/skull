@@ -10,6 +10,7 @@ build/
 run
 
 ### IntelliJ IDEA ###
+!.idea/dictionaries
 .idea
 *.iws
 *.iml

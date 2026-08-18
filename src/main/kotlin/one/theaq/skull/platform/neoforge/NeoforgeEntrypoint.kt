@@ -7,6 +7,7 @@ import one.theaq.skull.Main
 @Mod(Main.MOD_ID)
 class NeoforgeEntrypoint {
     init {
+        NeoforgeEvents()
         Main.initialize()
     }
 }
