@@ -6,12 +6,13 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 
 object CommandRegistry {
-    val COMMANDS = emptyList<BaseCommand>()
+    private val COMMANDS = mutableListOf<BaseCommand>()
 
-    val SKULL_COMMAND = addCommand()
+    val SKULL_COMMAND = addCommand(SkullCommand())
 
-    fun addCommand() {
-
+    private fun addCommand(command: BaseCommand): BaseCommand {
+        COMMANDS += command
+        return command
     }
 
     fun registerCommands(dispatcher: CommandDispatcher<CommandSourceStack>, context: CommandBuildContext, selection: Commands.CommandSelection) {

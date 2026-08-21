@@ -19,7 +19,7 @@ fun Project.applyMixinDebugSettings(vmArgConsumer: Consumer<String>, propertyCon
         }
     }.files.singleFile
     vmArgConsumer.accept("-javaagent:$mixinJarFile")
-    vmArgConsumer.accept("-XX:+AllowEnhancedClassRedefinition")
+    //vmArgConsumer.accept("-XX:+AllowEnhancedClassRedefinition")
     propertyConsumer.accept("mixin.hotSwap", "true")
     propertyConsumer.accept("mixin.debug.export", "true")
 }
