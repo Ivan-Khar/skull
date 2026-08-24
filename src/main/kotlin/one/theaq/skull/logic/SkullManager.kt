@@ -1,0 +1,26 @@
+package one.theaq.skull.logic
+
+import net.minecraft.core.BlockPos
+
+class SkullManager {
+
+    val skulls: MutableList<Skull> = mutableListOf()
+
+    fun tickSkulls() {
+        skulls.forEach {
+            it.tick()
+        }
+    }
+
+    fun createSkull() {
+
+    }
+
+    fun createSkull(pos: Vec3) {
+
+    }
+
+    companion object {
+        val INSTANCE: SkullManager = SkullManager()
+    }
+}
