@@ -1,6 +1,6 @@
 package one.theaq.skull.logic
 
-import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.Vec3
 
 class SkullManager {
 
