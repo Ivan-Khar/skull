@@ -4,6 +4,7 @@ import eu.pb4.polymer.virtualentity.api.ElementHolder
 import eu.pb4.polymer.virtualentity.api.attachment.HolderAttachment
 import eu.pb4.polymer.virtualentity.api.attachment.ManualAttachment
 import eu.pb4.polymer.virtualentity.api.elements.BlockDisplayElement
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySelector
@@ -16,7 +17,7 @@ import kotlin.jvm.optionals.getOrElse
 
 class Skull(val level: ServerLevel) {
 
-    val server = level.server
+    val server: MinecraftServer = level.server
 
     var pos: Vec3 = Vec3.ZERO
     var oldPos: Vec3 = Vec3.ZERO
@@ -59,8 +60,6 @@ class Skull(val level: ServerLevel) {
         val nearbyPlayers = level.players().filter { it.position().distanceTo(this.pos) < 128 }
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
         holderAttachment.tick()
-
-
     }
 
     fun getTarget(): Optional<Entity> {
