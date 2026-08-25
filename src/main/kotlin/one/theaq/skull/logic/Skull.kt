@@ -33,10 +33,6 @@ class Skull(val level: ServerLevel) {
         elementHolder.addElement(displayElement)
     }
 
-    fun setPos(newPos: Vec3) {
-        pos = newPos
-    }
-
     fun tick() {
         recentlyKilled.values.removeAll { tick -> server.tickCount - tick > 200 }
 
@@ -57,8 +53,11 @@ class Skull(val level: ServerLevel) {
     }
 
     fun render() {
+        val holderAttachments = holderAttachment.holder().watchingPlayers
         val nearbyPlayers = level.players().filter { it.position().distanceTo(this.pos) < 128 }
+        holderAttachments.removeAll { it.player !in nearbyPlayers } // Prob breaks with immersive portals
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
+
         holderAttachment.tick()
     }
 

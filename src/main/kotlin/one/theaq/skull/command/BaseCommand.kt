@@ -19,7 +19,7 @@ abstract class BaseCommand {
         val main = dispatcher.register(mainBuilder)
         val alias = dispatcher.register(
             Commands.literal(getName())
-            .redirect(main)
+                .redirect(main)
         )
     }
 
