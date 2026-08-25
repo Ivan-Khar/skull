@@ -22,7 +22,7 @@ class Skull(val level: ServerLevel) {
     var pos: Vec3 = Vec3.ZERO
     var oldPos: Vec3 = Vec3.ZERO
 
-    var targetUUID: Optional<UUID> = Optional.empty()
+    var target: Optional<Entity> = Optional.empty()
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
 
     val displayElement: BlockDisplayElement = BlockDisplayElement(Blocks.SKELETON_SKULL.defaultBlockState())
@@ -30,25 +30,27 @@ class Skull(val level: ServerLevel) {
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
+        displayElement.interpolationDuration = 50
         elementHolder.addElement(displayElement)
     }
 
     fun tick() {
         recentlyKilled.values.removeAll { tick -> server.tickCount - tick > 200 }
 
-        val targetPlayer = getTarget()
+        checkTarget()
         render()
         checkCollisions()
-        move(targetPlayer)
+        move()
     }
 
-    fun move(target: Optional<Entity>) {
+    fun move() {
         oldPos = pos
+        if (target.isEmpty) return
 
     }
 
     fun checkCollisions() {
-        val collidingEntities = level.allEntities.filter { it.position().distanceTo(this.pos) < 1 }
+        val collidingEntities = level.allEntities.filter { it.position().distanceTo(this.pos) < 2 }
         collidingEntities.forEach { onCollision(it) }
     }
 
@@ -59,32 +61,32 @@ class Skull(val level: ServerLevel) {
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
         holderAttachment.tick()
+        if (target.isEmpty) return
+
+        displayElement.startInterpolation
+        displayElement.setRotation(target.get().xRot, target.get().yHeadRot)
     }
 
-    fun getTarget(): Optional<Entity> {
-        val uuid = targetUUID.getOrElse {
-            val newTarget = getNewTarget()
-            if (newTarget.isEmpty) return Optional.empty()
+    fun checkTarget() {
+        if (target.isPresent && target.get() in level.players()) return
 
-            getNewTarget().get()
-        }
-
-        return Optional.ofNullable(level.getEntity(uuid))
+        target = getNewTarget()
     }
 
-    fun getNewTarget(): Optional<UUID> {
+    fun getNewTarget(): Optional<Entity> {
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
+        playerTargets.removeAll { it.uuid in recentlyKilled.keys }
         if (playerTargets.isEmpty()) return Optional.empty()
 
-        if (targetUUID.isPresent && playerTargets.size > 1) playerTargets.removeAll { it.uuid == targetUUID }
-
         val newTarget: Player = playerTargets.random()
-        return Optional.of(newTarget.uuid)
+        return Optional.of(newTarget)
     }
 
     fun onCollision(collider: Entity) {
-        if (collider.uuid != targetUUID) return
+        if (target.isEmpty || collider.uuid != target.get().uuid) return
 
+        recentlyKilled += Pair(target.get().uuid, server.tickCount)
         collider.kill(level)
+        target = Optional.empty()
     }
 }
