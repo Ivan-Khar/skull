@@ -22,6 +22,7 @@ repositories {
     maven("https://maven.quiltmc.org/repository/release/")
     maven("https://maven.blamejared.com/")
     maven("https://maven.shedaniel.me/")
+    maven("https://maven.nucleoid.xyz")
 
     strictMaven("https://www.cursemaven.com", "Curseforge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
@@ -37,6 +38,8 @@ dependencies {
     implementation("net.fabricmc:fabric-loader:0.19.3")
     implementation("net.fabricmc.fabric-api:fabric-api:${deps("fabric_api")}")
     implementation("net.fabricmc:fabric-language-kotlin:${deps("fabric-language-kotlin")}")
+    implementation("eu.pb4:polymer-core:${deps("polymer")}")
+    implementation("eu.pb4:polymer-virtual-entity:${deps("polymer")}")
 
     remoteDepBuilder(project, fletchingTable::modrinth)
         .dep("sodium") { implementation(it) }
