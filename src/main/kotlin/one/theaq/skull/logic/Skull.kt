@@ -53,9 +53,9 @@ class Skull(val level: ServerLevel) {
     }
 
     fun render() {
-        val holderAttachments = holderAttachment.holder().watchingPlayers
-        val nearbyPlayers = level.players().filter { it.position().distanceTo(this.pos) < 128 }
-        holderAttachments.removeAll { it.player !in nearbyPlayers } // Prob breaks with immersive portals
+        val holderWatching = holderAttachment.holder().watchingPlayers
+        val nearbyPlayers = level.players().filter { it.position().distanceTo(this.pos) < 64 }
+        holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) } // Prob breaks with immersive portals
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
         holderAttachment.tick()
