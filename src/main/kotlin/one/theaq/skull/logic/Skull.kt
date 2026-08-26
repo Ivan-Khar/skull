@@ -6,6 +6,7 @@ import eu.pb4.polymer.virtualentity.api.attachment.ManualAttachment
 import eu.pb4.polymer.virtualentity.api.elements.BlockDisplayElement
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.Util
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.player.Player
@@ -66,10 +67,9 @@ class Skull(val level: ServerLevel) {
         val target = targetOptional.get()
 
         val deltaPos = pos.subtract(target.position())
-        displayElement.setRotation(
-            atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y).toFloat(),
-            atan2(deltaPos.z, deltaPos.x).toFloat()
-        )
+        val pitch: Float = (Math.toDegrees(atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y))).toFloat()
+        val yaw: Float = (Math.toDegrees(atan2(deltaPos.z, deltaPos.x)) + 90).toFloat()
+        displayElement.setRotation(pitch, yaw)
     }
 
     fun checkTarget() {
