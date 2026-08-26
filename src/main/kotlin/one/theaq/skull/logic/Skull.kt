@@ -67,9 +67,9 @@ class Skull(val level: ServerLevel) {
         val target = targetOptional.get()
 
         val deltaPos = pos.subtract(target.position())
-        val pitch: Float = (Math.toDegrees(atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y))).toFloat()
-        val yaw: Float = (Math.toDegrees(atan2(deltaPos.z, deltaPos.x)) + 90).toFloat()
-        displayElement.setRotation(pitch, yaw)
+        val pitch = Math.toDegrees(atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y)) - 90
+        val yaw = Math.toDegrees(atan2(deltaPos.z, deltaPos.x)) - 90
+        displayElement.setRotation(pitch.toFloat(), yaw.toFloat())
     }
 
     fun checkTarget() {
