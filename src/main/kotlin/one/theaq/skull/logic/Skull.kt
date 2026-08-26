@@ -13,7 +13,8 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
 import java.util.Optional
 import java.util.UUID
-import kotlin.jvm.optionals.getOrElse
+import kotlin.math.atan2
+import kotlin.math.sqrt
 
 class Skull(val level: ServerLevel) {
 
@@ -22,7 +23,7 @@ class Skull(val level: ServerLevel) {
     var pos: Vec3 = Vec3.ZERO
     var oldPos: Vec3 = Vec3.ZERO
 
-    var target: Optional<Entity> = Optional.empty()
+    var targetOptional: Optional<Entity> = Optional.empty()
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
 
     val displayElement: BlockDisplayElement = BlockDisplayElement(Blocks.SKELETON_SKULL.defaultBlockState())
@@ -45,7 +46,7 @@ class Skull(val level: ServerLevel) {
 
     fun move() {
         oldPos = pos
-        if (target.isEmpty) return
+        if (targetOptional.isEmpty) return
 
     }
 
@@ -61,16 +62,20 @@ class Skull(val level: ServerLevel) {
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
         holderAttachment.tick()
-        if (target.isEmpty) return
+        if (targetOptional.isEmpty) return
+        val target = targetOptional.get()
 
-        displayElement.startInterpolation
-        displayElement.setRotation(target.get().xRot, target.get().yHeadRot)
+        val deltaPos = pos.subtract(target.position())
+        displayElement.setRotation(
+            atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y).toFloat(),
+            atan2(deltaPos.z, deltaPos.x).toFloat()
+        )
     }
 
     fun checkTarget() {
-        if (target.isPresent && target.get() in level.players()) return
+        if (targetOptional.isPresent && targetOptional.get() in level.players()) return
 
-        target = getNewTarget()
+        targetOptional = getNewTarget()
     }
 
     fun getNewTarget(): Optional<Entity> {
@@ -83,10 +88,10 @@ class Skull(val level: ServerLevel) {
     }
 
     fun onCollision(collider: Entity) {
-        if (target.isEmpty || collider.uuid != target.get().uuid) return
+        if (targetOptional.isEmpty || collider.uuid != targetOptional.get().uuid) return
 
-        recentlyKilled += Pair(target.get().uuid, server.tickCount)
+        recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
         collider.kill(level)
-        target = Optional.empty()
+        targetOptional = Optional.empty()
     }
 }
