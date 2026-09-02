@@ -11,18 +11,6 @@
       "linenumber": 28,
       "name": "default void startWatching(ServerPlayer handler) {",
       "bookmarkType": "DEFAULT"
-    },
-    {
-      "fileDescriptor": "$/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-1c6e85ac92/26.2/minecraft-merged-1c6e85ac92-26.2-sources.jar!/net/minecraft/client/gui/contextualbar/LocatorBar.java",
-      "linenumber": 51,
-      "name": "this.minecraft",
-      "bookmarkType": "DEFAULT"
-    },
-    {
-      "fileDescriptor": "$/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-1c6e85ac92/26.2/minecraft-merged-1c6e85ac92-26.2-sources.jar!/net/minecraft/client/gui/contextualbar/LocatorBar.java",
-      "linenumber": 51,
-      "name": "this.minecraft",
-      "bookmarkType": "DEFAULT"
     }
   ]
 }
