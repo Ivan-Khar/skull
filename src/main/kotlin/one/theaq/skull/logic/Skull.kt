@@ -11,7 +11,6 @@ import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
-import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.util.Optional
 import java.util.UUID
@@ -51,11 +50,15 @@ class Skull(val level: ServerLevel) {
     fun move() {
         oldPos = pos
         if (targetOptional.isEmpty) return
+        val target = targetOptional.get()
+        val targetPos = target.eyePosition
 
+        val deltaPos = target.eyePosition.subtract(pos).scale(0.025)
+        this.pos = pos.add(deltaPos)
     }
 
     fun checkCollisions() {
-        val collidingEntities = level.allEntities.filter { it.eyePosition.distanceTo(this.pos) < 1 }
+        val collidingEntities = level.allEntities.filter { it.eyePosition.distanceTo(this.pos) < 0.5 }
         collidingEntities.forEach { onCollision(it) }
     }
 
