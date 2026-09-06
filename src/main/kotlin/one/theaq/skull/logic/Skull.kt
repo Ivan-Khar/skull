@@ -72,8 +72,8 @@ class Skull(val level: ServerLevel) {
         val deltaPos = pos.subtract(target.eyePosition)
         val pitch = atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y)
         val yaw = atan2(deltaPos.z, deltaPos.x)
-        //displayElement.setRotation(pitch.toFloat(), yaw.toFloat())
-        displayElement.leftRotation = Quaternionf(0.0, 0.0, 0.0, 1.0)
+        displayElement.setRotation(pitch.toFloat(), yaw.toFloat())
+        //displayElement.leftRotation = Quaternionf(0.0, 0.0, 0.0, 1.0)
     }
 
     fun checkTarget() {
