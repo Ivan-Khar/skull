@@ -3,15 +3,16 @@ package one.theaq.skull.logic
 import eu.pb4.polymer.virtualentity.api.ElementHolder
 import eu.pb4.polymer.virtualentity.api.attachment.HolderAttachment
 import eu.pb4.polymer.virtualentity.api.attachment.ManualAttachment
-import eu.pb4.polymer.virtualentity.api.elements.BlockDisplayElement
+import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.Util
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
+import org.joml.Quaternionf
+import org.joml.Vector3f
 import java.util.Optional
 import java.util.UUID
 import kotlin.math.atan2
@@ -27,12 +28,14 @@ class Skull(val level: ServerLevel) {
     var targetOptional: Optional<Entity> = Optional.empty()
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
 
-    val displayElement: BlockDisplayElement = BlockDisplayElement(Blocks.SKELETON_SKULL.defaultBlockState())
+    val displayElement: ItemDisplayElement = ItemDisplayElement(Blocks.SKELETON_SKULL.asItem())
     val elementHolder: ElementHolder = ElementHolder()
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
         displayElement.interpolationDuration = 50
+        displayElement.setDisplaySize(0.5f, 0.5f)
+        displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
         elementHolder.addElement(displayElement)
     }
 
@@ -52,13 +55,13 @@ class Skull(val level: ServerLevel) {
     }
 
     fun checkCollisions() {
-        val collidingEntities = level.allEntities.filter { it.position().distanceTo(this.pos) < 2 }
+        val collidingEntities = level.allEntities.filter { it.eyePosition.distanceTo(this.pos) < 1 }
         collidingEntities.forEach { onCollision(it) }
     }
 
     fun render() {
         val holderWatching = holderAttachment.holder().watchingPlayers
-        val nearbyPlayers = level.players().filter { it.position().distanceTo(this.pos) < 64 }
+        val nearbyPlayers = level.players().filter { it.eyePosition.distanceTo(this.pos) < 64 }
         holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) } // Prob breaks with immersive portals
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
@@ -66,10 +69,11 @@ class Skull(val level: ServerLevel) {
         if (targetOptional.isEmpty) return
         val target = targetOptional.get()
 
-        val deltaPos = pos.subtract(target.position())
-        val pitch = Math.toDegrees(atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y)) - 90
-        val yaw = Math.toDegrees(atan2(deltaPos.z, deltaPos.x)) - 90
-        displayElement.setRotation(pitch.toFloat(), yaw.toFloat())
+        val deltaPos = pos.subtract(target.eyePosition)
+        val pitch = atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y)
+        val yaw = atan2(deltaPos.z, deltaPos.x)
+        //displayElement.setRotation(pitch.toFloat(), yaw.toFloat())
+        displayElement.leftRotation = Quaternionf(0.0, 0.0, 0.0, 1.0)
     }
 
     fun checkTarget() {
