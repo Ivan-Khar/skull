@@ -12,6 +12,9 @@ fun Project.deps(name: String, consumer: (prop: String) -> Unit) = deps(name)?.l
 fun Project.mod(name: String): String? = findProperty("mod.${name}") as String?
 fun Project.mod(name: String, consumer: (prop: String) -> Unit) = mod(name)?.let(consumer)
 
+fun Project.mc(name: String): String? = findProperty("mc.${name}") as String?
+fun Project.mc(name: String, consumer: (prop: String) -> Unit) = mc(name)?.let(consumer)
+
 fun Project.applyMixinDebugSettings(vmArgConsumer: Consumer<String>, propertyConsumer: BiConsumer<String, String>) {
     val mixinJarFile = configurations.named("runtimeClasspath").get().incoming.artifactView {
         componentFilter {
@@ -22,23 +25,4 @@ fun Project.applyMixinDebugSettings(vmArgConsumer: Consumer<String>, propertyCon
     //vmArgConsumer.accept("-XX:+AllowEnhancedClassRedefinition")
     propertyConsumer.accept("mixin.hotSwap", "true")
     propertyConsumer.accept("mixin.debug.export", "true")
-}
-
-fun Project.remoteDepBuilder(project: Project, depResolver: (String, String) -> Dependency): RemoteDepBuilder {
-    return RemoteDepBuilder(project, depResolver)
-}
-
-class RemoteDepBuilder(private val project: Project, private val depResolver: (String, String) -> Dependency) {
-    private val minecraft: String by lazy {
-        project.extensions.extraProperties.get("minecraft") as String
-    }
-
-    fun dep(id: String, version: String = minecraft, handler: (dep: Dependency) -> Unit): RemoteDepBuilder {
-        try {
-            handler(depResolver(id, version))
-        } catch (e: Exception) {
-            project.logger.warn(e.message)
-        }
-        return this
-    }
 }

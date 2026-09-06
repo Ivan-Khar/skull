@@ -1,4 +1,3 @@
-import dev.kikugie.fletching_table.annotation.MixinEnvironment
 import multiloader.utils.*
 
 plugins {
@@ -6,7 +5,7 @@ plugins {
     id("net.neoforged.moddev")
     id("multiloader.common")
     id("com.google.devtools.ksp") version "2.3.9"
-    id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.22"
+    alias(ft.plugins.default)
     id("com.github.gmazzo.buildconfig") version "5.7.1"
 }
 
@@ -27,17 +26,14 @@ repositories {
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
 }
 
-val minecraft: String by project
+val minecraft: String = mc("version")!!
 val loader: String by project
 base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
-    remoteDepBuilder(project, fletchingTable::modrinth)
+    fletchingTable.minecraft = mc("version")
 
-    deps("kotlinforforge-neoforge") { runtimeOnly("thedarkcolour:kotlinforforge-neoforge:${it}") }
-    deps("sodium") {
-        implementation("maven.modrinth:sodium:$it")
-    }
+    runtimeOnly("thedarkcolour:kotlinforforge-neoforge:${deps("kotlinforforge-neoforge")}")
 }
 
 java {
@@ -129,11 +125,9 @@ neoForge {
 }
 
 fletchingTable {
-    mixins.register("main") {
-        mixin("default", "skull.mixins.json")
-        mixin("client", "skull.client.mixins.json") {
-            environment = MixinEnvironment.Env.CLIENT
-        }
+    mixins.configure(sourceSets.main) {
+        mixin("skull.mixins.json", "default")
+        mixin("skull.client.mixins.json", "client") { env("CLIENT") }
     }
 }
 
