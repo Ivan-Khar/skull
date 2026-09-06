@@ -53,7 +53,7 @@ class Skull(val level: ServerLevel) {
         val target = targetOptional.get()
         val targetPos = target.eyePosition
 
-        val deltaPos = target.eyePosition.subtract(pos).scale(0.025)
+        val deltaPos = targetPos.subtract(pos).scale(0.025)
         this.pos = pos.add(deltaPos)
     }
 
