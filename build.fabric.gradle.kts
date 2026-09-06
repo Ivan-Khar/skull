@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import dev.kikugie.fletching_table.annotation.MixinEnvironment
 import org.gradle.kotlin.dsl.mappings
 import org.gradle.kotlin.dsl.remapJar
 import multiloader.utils.*
