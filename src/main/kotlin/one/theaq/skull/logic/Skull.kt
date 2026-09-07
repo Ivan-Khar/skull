@@ -33,11 +33,12 @@ class Skull(val level: ServerLevel) {
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
-        displayElement.interpolationDuration = 2
+        displayElement.interpolationDuration = 1
         displayElement.setDisplaySize(0.5f, 0.5f)
         displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
         elementHolder.addElement(displayElement)
         displayElement.startInterpolation()
+        displayElement.teleportDuration = 2
     }
 
     fun tick() {
@@ -57,11 +58,11 @@ class Skull(val level: ServerLevel) {
 
         val deltaPos = targetPos.subtract(pos).scale(0.025)
 
-        //this.pos = pos.add(deltaPos)
+        this.pos = pos.add(deltaPos)
     }
 
     fun checkCollisions() {
-        val collidingEntities = level.allEntities.filter { it.eyePosition.distanceTo(this.pos) < 0.5 }
+        val collidingEntities = level.allEntities.filter { it.eyePosition.distanceTo(this.oldPos) < 0.5 }
         collidingEntities.forEach { onCollision(it) }
     }
 
@@ -76,15 +77,18 @@ class Skull(val level: ServerLevel) {
         val target = targetOptional.get()
 
         // rotation
-        val deltaPos = pos.subtract(target.eyePosition)
-        val pitch = (atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y) - Math.PI/2).toFloat()
-        val yaw = (atan2(deltaPos.z, deltaPos.x) - Math.PI/2).toFloat()
+        val targetDelta = pos.subtract(target.eyePosition)
+        val pitch = (atan2(sqrt(targetDelta.z * targetDelta.z + targetDelta.x * targetDelta.x), targetDelta.y) - Math.PI/2).toFloat()
+        val yaw = (atan2(targetDelta.z, targetDelta.x) - Math.PI/2).toFloat()
         val quaternionPitch = Quaternionf().fromAxisAngleRad(1.0f, 0.0f, 0.0f, pitch)
         val quaternionYaw = Quaternionf().fromAxisAngleRad(0.0f, -1.0f, 0.0f, yaw)
         displayElement.leftRotation = quaternionYaw.mul(quaternionPitch)
-        displayElement.startInterpolation()
-        // position
 
+        // position
+        val posTranslation = oldPos.subtract(pos).add(0.0, 0.25, 0.0)
+        displayElement.translation = posTranslation.toVector3f()
+
+        displayElement.startInterpolation()
     }
 
     fun checkTarget() {
