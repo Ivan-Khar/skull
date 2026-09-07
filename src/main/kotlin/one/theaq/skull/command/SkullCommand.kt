@@ -2,6 +2,7 @@ package one.theaq.skull.command
 
 import com.mojang.brigadier.builder.ArgumentBuilder
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
 import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.Permission
 import net.minecraft.server.permissions.Permissions
@@ -18,11 +19,11 @@ class SkullCommand: BaseCommand() {
     }
 
     override fun <T : ArgumentBuilder<CommandSourceStack, T>> commandBuilder(command: T): T {
-        command.executes {
+        command.then(Commands.literal("spawn").executes {
             it.source.sendSystemMessage(Component.literal("spawned skull at 0 0"))
             SkullManager.INSTANCE.createSkull(it.source.level)
             return@executes 0
-        }
+        })
 
         return command
     }

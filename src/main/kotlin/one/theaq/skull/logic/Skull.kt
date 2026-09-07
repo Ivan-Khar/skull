@@ -38,7 +38,7 @@ class Skull(val level: ServerLevel) {
         displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
         elementHolder.addElement(displayElement)
         displayElement.startInterpolation()
-        displayElement.teleportDuration = 2
+        displayElement.teleportDuration = 1
     }
 
     fun tick() {
