@@ -33,10 +33,11 @@ class Skull(val level: ServerLevel) {
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
-        displayElement.interpolationDuration = 50
+        displayElement.interpolationDuration = 2
         displayElement.setDisplaySize(0.5f, 0.5f)
         displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
         elementHolder.addElement(displayElement)
+        displayElement.startInterpolation()
     }
 
     fun tick() {
@@ -55,7 +56,8 @@ class Skull(val level: ServerLevel) {
         val targetPos = target.eyePosition
 
         val deltaPos = targetPos.subtract(pos).scale(0.025)
-        this.pos = pos.add(deltaPos)
+
+        //this.pos = pos.add(deltaPos)
     }
 
     fun checkCollisions() {
@@ -73,12 +75,16 @@ class Skull(val level: ServerLevel) {
         if (targetOptional.isEmpty) return
         val target = targetOptional.get()
 
+        // rotation
         val deltaPos = pos.subtract(target.eyePosition)
         val pitch = (atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y) - Math.PI/2).toFloat()
         val yaw = (atan2(deltaPos.z, deltaPos.x) - Math.PI/2).toFloat()
         val quaternionPitch = Quaternionf().fromAxisAngleRad(1.0f, 0.0f, 0.0f, pitch)
         val quaternionYaw = Quaternionf().fromAxisAngleRad(0.0f, -1.0f, 0.0f, yaw)
         displayElement.leftRotation = quaternionYaw.mul(quaternionPitch)
+        displayElement.startInterpolation()
+        // position
+
     }
 
     fun checkTarget() {
