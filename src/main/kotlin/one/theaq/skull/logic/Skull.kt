@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
+import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.util.Optional
 import java.util.UUID
@@ -73,10 +74,11 @@ class Skull(val level: ServerLevel) {
         val target = targetOptional.get()
 
         val deltaPos = pos.subtract(target.eyePosition)
-        val pitch = atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y)
-        val yaw = atan2(deltaPos.z, deltaPos.x)
-        displayElement.setRotation(Math.toDegrees(pitch).toFloat() - 90f, Math.toDegrees(yaw).toFloat() - 90f)
-        //displayElement.leftRotation = Quaternionf(0.0, 0.0, 0.0, 1.0)
+        val pitch = (atan2(sqrt(deltaPos.z * deltaPos.z + deltaPos.x * deltaPos.x), deltaPos.y) - Math.PI/2).toFloat()
+        val yaw = (atan2(deltaPos.z, deltaPos.x) - Math.PI/2).toFloat()
+        val quaternionPitch = Quaternionf().fromAxisAngleRad(1.0f, 0.0f, 0.0f, pitch)
+        val quaternionYaw = Quaternionf().fromAxisAngleRad(0.0f, -1.0f, 0.0f, yaw)
+        displayElement.leftRotation = quaternionYaw.mul(quaternionPitch)
     }
 
     fun checkTarget() {
