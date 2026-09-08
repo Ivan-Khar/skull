@@ -27,11 +27,22 @@ class SkullManager {
         return 0
     }
 
+    fun removeAllSkulls(): Int {
+        markedForRemoval.addAll(skulls)
+        return 0
+    }
+
+    fun getSkulls(level: ServerLevel, pos: Vec3, radius: Double = -1.0): List<Skull> {
+        return skulls.filter { it.level == level && (radius < 0 || pos.subtract(it.pos).length() < radius) }
+    }
+
     fun tickSkulls(server: MinecraftServer) {
-        markedForRemoval.forEach {
+        markedForRemoval.removeIf {
             it.destroy()
             skulls.remove(it)
+            return@removeIf true
         }
+
         skulls.forEach {
             it.tick()
         }
