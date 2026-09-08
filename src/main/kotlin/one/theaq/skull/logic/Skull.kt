@@ -34,12 +34,11 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
-        displayElement.interpolationDuration = 1
-        displayElement.teleportDuration = 1
+        displayElement.interpolationDuration = 2
+        displayElement.teleportDuration = 5
         displayElement.setDisplaySize(0.5f, 0.5f)
         displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
         elementHolder.addElement(displayElement)
-        displayElement.startInterpolation()
     }
 
     fun tick() {
@@ -115,7 +114,7 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
 
     fun getNewTarget(reason: SwitchTargetReason): Optional<Entity> {
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
-        playerTargets.removeAll { it.uuid in recentlyKilled.keys }
+        playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive }
         if (playerTargets.isEmpty()) return Optional.empty()
 
         val newTarget: Player = playerTargets.random()
@@ -124,7 +123,9 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
 
     fun onCollision(collider: Entity) {
         if (targetOptional.isEmpty || collider.uuid != targetOptional.get().uuid) return
+        val target = targetOptional.get()
 
+        if (!target.isAlive) return
         manager.removeSkull(this) // TODO: <- Config option
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
         collider.kill(level)
