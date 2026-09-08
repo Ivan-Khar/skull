@@ -34,11 +34,11 @@ class Skull(val level: ServerLevel) {
 
     init {
         displayElement.interpolationDuration = 1
+        displayElement.teleportDuration = 1
         displayElement.setDisplaySize(0.5f, 0.5f)
         displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
         elementHolder.addElement(displayElement)
         displayElement.startInterpolation()
-        displayElement.teleportDuration = 1
     }
 
     fun tick() {
@@ -56,9 +56,19 @@ class Skull(val level: ServerLevel) {
         val target = targetOptional.get()
         val targetPos = target.eyePosition
 
-        val deltaPos = targetPos.subtract(pos).scale(0.025)
+        val targetDelta = targetPos.subtract(pos)
+        val targetVector = targetPos.subtract(pos).normalize()
+        val targetDistance = targetDelta.length()
+        val baseSpeed = 0.05
+        val speed = when {
+            targetDistance < 16.0 -> baseSpeed
+            targetDistance in 16.0..64.0 -> one.theaq.skull.util.Math.map(targetDistance, 16.0, 64.0, baseSpeed, baseSpeed * 10)
+            targetDistance in 64.0..1024.0 -> one.theaq.skull.util.Math.map(targetDistance, 64.0, 1024.0, baseSpeed * 10, baseSpeed * 200)
+            targetDistance > 1024.0 -> baseSpeed * 500
+            else -> baseSpeed
+        }
 
-        this.pos = pos.add(deltaPos)
+        this.pos = pos.add(targetVector.scale(speed))
     }
 
     fun checkCollisions() {
@@ -68,7 +78,7 @@ class Skull(val level: ServerLevel) {
 
     fun render() {
         val holderWatching = holderAttachment.holder().watchingPlayers
-        val nearbyPlayers = level.players().filter { it.eyePosition.distanceTo(this.pos) < 64 }
+        val nearbyPlayers = level.players().filter { it.eyePosition.distanceTo(this.pos) < 128 }
         holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) } // Prob breaks with immersive portals
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
