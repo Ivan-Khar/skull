@@ -7,22 +7,34 @@ import net.minecraft.world.phys.Vec3
 class SkullManager {
 
     private val skulls: MutableList<Skull> = mutableListOf()
-
-    fun tickSkulls(server: MinecraftServer) {
-        skulls.forEach {
-            it.tick()
-        }
-    }
+    private val markedForRemoval: MutableList<Skull> = mutableListOf()
 
     fun createSkull(level: ServerLevel) {
         this.createSkull(level, Vec3(0.0, 0.0, 0.0))
     }
 
     fun createSkull(level: ServerLevel, pos: Vec3) {
-        val skull = Skull(level)
+        val skull = Skull(this, level)
         skull.pos = pos
 
         skulls += skull
+    }
+
+    fun removeSkull(skull: Skull): Int {
+        if (!skulls.contains(skull)) return -1
+
+        markedForRemoval += skull
+        return 0
+    }
+
+    fun tickSkulls(server: MinecraftServer) {
+        markedForRemoval.forEach {
+            it.destroy()
+            skulls.remove(it)
+        }
+        skulls.forEach {
+            it.tick()
+        }
     }
 
     companion object {

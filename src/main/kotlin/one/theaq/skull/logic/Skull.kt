@@ -19,7 +19,7 @@ import java.util.UUID
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class Skull(val level: ServerLevel) {
+class Skull(val manager: SkullManager, val level: ServerLevel) {
 
     val server: MinecraftServer = level.server
 
@@ -60,7 +60,7 @@ class Skull(val level: ServerLevel) {
         val targetDelta = targetPos.subtract(pos)
         val targetVector = targetPos.subtract(pos).normalize()
         val targetDistance = targetDelta.length()
-        val baseSpeed = 0.05
+        val baseSpeed = 0.05 // TODO: <- Config option
         val speed = when {
             targetDistance < 16.0 -> baseSpeed
             targetDistance in 16.0..64.0 -> SkullMath.map(targetDistance, 16.0, 64.0, baseSpeed, baseSpeed * 10)
@@ -80,7 +80,7 @@ class Skull(val level: ServerLevel) {
     fun render() {
         val holderWatching = holderAttachment.holder().watchingPlayers
         val nearbyPlayers = level.players().filter { it.eyePosition.distanceTo(this.pos) < 128 }
-        holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) } // Prob breaks with immersive portals
+        holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) } // TODO: Prob breaks with immersive portals
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
         holderAttachment.tick()
@@ -120,8 +120,16 @@ class Skull(val level: ServerLevel) {
     fun onCollision(collider: Entity) {
         if (targetOptional.isEmpty || collider.uuid != targetOptional.get().uuid) return
 
+        manager.removeSkull(this) // TODO: <- Config option
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
         collider.kill(level)
         targetOptional = Optional.empty()
+    }
+
+    /**
+     *  Use [removeSkull(skull: Skull)][SkullManager.removeSkull] instead
+     */
+    fun destroy() {
+        holderAttachment.destroy()
     }
 }
