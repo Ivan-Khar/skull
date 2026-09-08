@@ -29,7 +29,7 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
     var targetOptional: Optional<Entity> = Optional.empty()
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
 
-    val displayElement: ItemDisplayElement = ItemDisplayElement(Blocks.SKELETON_SKULL.asItem())
+    val displayElement: ItemDisplayElement = ItemDisplayElement(Blocks.SKELETON_SKULL.asItem()) // TODO: <- Config option for item type
     val elementHolder: ElementHolder = ElementHolder()
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
@@ -103,12 +103,17 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
     }
 
     fun checkTarget() {
-        if (targetOptional.isPresent && targetOptional.get() in level.players()) return
-
-        targetOptional = getNewTarget()
+        targetOptional = when {
+            !targetOptional.isPresent -> getNewTarget(SwitchTargetReason.EMPTY_TARGET)
+            !server.playerList.players.contains(targetOptional.get()) -> getNewTarget(SwitchTargetReason.LEFT_SERVER)
+            !level.getPlayers { true }.contains(targetOptional.get()) -> getNewTarget(SwitchTargetReason.DIFFERENT_DIMENSION)
+            !targetOptional.get().isAlive -> getNewTarget(SwitchTargetReason.DIED)
+            targetOptional.get().isSpectator -> getNewTarget(SwitchTargetReason.SPECTATOR)
+            else -> Optional.empty()
+        }
     }
 
-    fun getNewTarget(): Optional<Entity> {
+    fun getNewTarget(reason: SwitchTargetReason): Optional<Entity> {
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
         playerTargets.removeAll { it.uuid in recentlyKilled.keys }
         if (playerTargets.isEmpty()) return Optional.empty()
@@ -131,5 +136,14 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
      */
     fun destroy() {
         holderAttachment.destroy()
+    }
+
+    enum class SwitchTargetReason {
+        EMPTY_TARGET,
+        LEFT_SERVER,
+        DIED,
+        DIFFERENT_DIMENSION,
+        SPECTATOR,
+        COMMAND_SWITCHED
     }
 }
