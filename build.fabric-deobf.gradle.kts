@@ -38,9 +38,13 @@ dependencies {
     implementation("net.fabricmc:fabric-loader:0.19.3")
     implementation("net.fabricmc.fabric-api:fabric-api:${deps("fabric_api")}")
     implementation("net.fabricmc:fabric-language-kotlin:${deps("fabric-language-kotlin")}")
-    implementation("eu.pb4:polymer-core:${deps("polymer")}")
-    implementation("eu.pb4:polymer-virtual-entity:${deps("polymer")}")
 
+    include(implementation("eu.pb4:polymer-core:${deps("polymer")}")!!)
+    include(implementation("eu.pb4:polymer-virtual-entity:${deps("polymer")}")!!)
+
+    include(implementation("xyz.nucleoid:server-translations-api:${deps("server_translations_api")}")!!)
+
+    implementation("maven.modrinth:sodium:${deps("sodium")}")
 }
 
 java {

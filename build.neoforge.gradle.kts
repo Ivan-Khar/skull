@@ -34,6 +34,8 @@ dependencies {
     fletchingTable.minecraft = mc("version")
 
     runtimeOnly("thedarkcolour:kotlinforforge-neoforge:${deps("kotlinforforge-neoforge")}")
+
+    implementation("maven.modrinth:sodium:${deps("sodium")}")
 }
 
 java {
