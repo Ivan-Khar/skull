@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
+import one.theaq.skull.util.SkullMath
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.util.Optional
@@ -62,8 +63,8 @@ class Skull(val level: ServerLevel) {
         val baseSpeed = 0.05
         val speed = when {
             targetDistance < 16.0 -> baseSpeed
-            targetDistance in 16.0..64.0 -> one.theaq.skull.util.Math.map(targetDistance, 16.0, 64.0, baseSpeed, baseSpeed * 10)
-            targetDistance in 64.0..1024.0 -> one.theaq.skull.util.Math.map(targetDistance, 64.0, 1024.0, baseSpeed * 10, baseSpeed * 200)
+            targetDistance in 16.0..64.0 -> SkullMath.map(targetDistance, 16.0, 64.0, baseSpeed, baseSpeed * 10)
+            targetDistance in 64.0..1024.0 -> SkullMath.map(targetDistance, 64.0, 1024.0, baseSpeed * 10, baseSpeed * 200)
             targetDistance > 1024.0 -> baseSpeed * 500
             else -> baseSpeed
         }
