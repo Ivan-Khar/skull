@@ -9,7 +9,6 @@ import net.minecraft.commands.Commands
 import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.Permission
 import net.minecraft.server.permissions.Permissions
-import net.minecraft.world.level.storage.ServerLevelData
 import one.theaq.skull.logic.SkullManager
 
 class SkullCommand: BaseCommand() {
@@ -24,11 +23,16 @@ class SkullCommand: BaseCommand() {
     }
 
     override fun <T : ArgumentBuilder<CommandSourceStack, T>> commandBuilder(command: T): T {
-        command
-            .then(Commands.literal("spawn").executes(::spawnSkull))
-            .then(Commands.literal("list").then(Commands.argument("expand", BoolArgumentType.bool()).executes(::listSkulls)))
-            .then(Commands.literal("delete").then(Commands.argument("radius", DoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE)).executes(::deleteSkull)))
-            .then(Commands.literal("deleteAll").executes(::deleteAllSkulls))
+        val spawn = Commands.literal("spawn").executes(::spawnSkull)
+        val list = Commands.literal("list").executes(::listSkulls)
+            .then(Commands.argument("expand", BoolArgumentType.bool()).executes(::listSkulls))
+        val delete = Commands.literal("delete").then(Commands.argument("radius", DoubleArgumentType.doubleArg(-1.0, Double.MAX_VALUE)).executes(::deleteSkull))
+        val deleteAll = Commands.literal("deleteAll").executes(::deleteAllSkulls)
+
+        command.then(spawn)
+            .then(list)
+            .then(delete)
+            .then(deleteAll)
 
         return command
     }
@@ -43,7 +47,8 @@ class SkullCommand: BaseCommand() {
     fun listSkulls(context: CommandContext<CommandSourceStack>): Int {
         val skulls = skullManager.getAllSkulls()
         val textResponse = Component.literal("Skull list: \n")
-        val expanded = BoolArgumentType.getBool(context, "expand")
+        val expanded = getOrDefault(context, "expand", false)
+
         skulls.forEach {
             textResponse.append("${it.uuid.toString().substring(0.. if (expanded) 35 else 7)} at ${String.format("%.2f %.2f %.2f", it.pos.x, it.pos.y, it.pos.z)} ${ if (it.targetOptional.isPresent) "targeting ${it.targetOptional.get().displayName.string}" else "searching for target" }\n")
         }

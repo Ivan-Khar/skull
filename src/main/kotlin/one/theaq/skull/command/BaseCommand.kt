@@ -2,6 +2,7 @@ package one.theaq.skull.command
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.builder.ArgumentBuilder
+import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.network.chat.Component
@@ -39,5 +40,16 @@ abstract class BaseCommand {
 
     private fun permissionCheck(commandSourceStack: CommandSourceStack): Boolean {
         return commandSourceStack.permissions().hasPermission(getPermissionLevel())
+    }
+
+    companion object {
+        fun <T: Any> getOrDefault(context: CommandContext<*>, name: String, default: T): T {
+            return try {
+                context.getArgument<T>(name, default.javaClass)
+            } catch (_: IllegalArgumentException) {
+                default
+            }
+
+        }
     }
 }
