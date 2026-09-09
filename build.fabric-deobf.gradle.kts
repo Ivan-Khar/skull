@@ -33,16 +33,24 @@ val loader: String by project
 base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
+    fun implementAndInclude(dependency: String) {
+        implementation(dependency)
+        include(dependency)
+    }
+
     minecraft("com.mojang:minecraft:$minecraft")
 
     implementation("net.fabricmc:fabric-loader:0.19.3")
     implementation("net.fabricmc.fabric-api:fabric-api:${deps("fabric_api")}")
     implementation("net.fabricmc:fabric-language-kotlin:${deps("fabric-language-kotlin")}")
 
-    include(implementation("eu.pb4:polymer-core:${deps("polymer")}")!!)
-    include(implementation("eu.pb4:polymer-virtual-entity:${deps("polymer")}")!!)
+    implementation("me.lucko:fabric-permissions-api:${deps("fabric_permissions")}")
+    compileOnly("net.luckperms:api:${deps("luckperms")}")
 
-    include(implementation("xyz.nucleoid:server-translations-api:${deps("server_translations_api")}")!!)
+    implementAndInclude("eu.pb4:polymer-core:${deps("polymer")}")
+    implementAndInclude("eu.pb4:polymer-virtual-entity:${deps("polymer")}")
+
+    implementAndInclude("xyz.nucleoid:server-translations-api:${deps("server_translations_api")}")
 
     implementation("maven.modrinth:sodium:${deps("sodium")}")
 }
