@@ -23,6 +23,7 @@ repositories {
     maven("https://maven.blamejared.com/")
     maven("https://maven.shedaniel.me/")
     maven("https://maven.nucleoid.xyz")
+    maven("https://maven.fzzyhmstrs.me/")
 
     strictMaven("https://www.cursemaven.com", "Curseforge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
@@ -51,6 +52,7 @@ dependencies {
     implementAndInclude("eu.pb4:polymer-virtual-entity:${deps("polymer")}")
 
     implementAndInclude("xyz.nucleoid:server-translations-api:${deps("server_translations_api")}")
+    implementation("me.fzzyhmstrs:fzzy_config:${deps("fzzy_config")}")
 
     implementation("maven.modrinth:sodium:${deps("sodium")}")
 }

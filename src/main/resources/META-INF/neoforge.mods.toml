@@ -15,10 +15,14 @@ authors = "${mod_author}"
 file = "${minecraft_version}-accesstransformer.cfg"
 
 [[dependencies.${ mod_id }]]
+modId = "fzzy_config"
+type = "required"
+
+[[dependencies.${ mod_id }]]
 modId = "neoforge"
 type = "required"
 ordering = "NONE"
-side = "BOTH"
+side = "SERVER"
 
 [[dependencies.${ mod_id }]]
 modId = "minecraft"

@@ -21,6 +21,8 @@ repositories {
     maven("https://maven.shedaniel.me/")
     maven("https://thedarkcolour.github.io/KotlinForForge/")
     maven("https://maven.parchmentmc.org")
+    maven("https://maven.fzzyhmstrs.me/")
+    maven("https://repo.nyon.dev/releases")
 
     strictMaven("https://www.cursemaven.com", "Curseforge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
@@ -34,6 +36,7 @@ dependencies {
     fletchingTable.minecraft = mc("version")
 
     runtimeOnly("thedarkcolour:kotlinforforge-neoforge:${deps("kotlinforforge-neoforge")}")
+    implementation("me.fzzyhmstrs:fzzy_config:${deps("fzzy_config")}+neoforge")
 
     implementation("maven.modrinth:sodium:${deps("sodium")}")
 }
