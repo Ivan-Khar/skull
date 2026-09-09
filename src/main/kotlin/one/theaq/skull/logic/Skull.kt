@@ -101,7 +101,7 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
         val quaternionYaw = Quaternionf().fromAxisAngleRad(0.0f, -1.0f, 0.0f, yaw)
         displayElement.leftRotation = quaternionYaw.mul(quaternionPitch)
 
-        displayElement.startInterpolation()
+        displayElement.startInterpolationIfDirty()
     }
 
     fun checkTarget() {
