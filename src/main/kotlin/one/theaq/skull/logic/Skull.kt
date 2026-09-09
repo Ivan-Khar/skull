@@ -31,6 +31,7 @@ class Skull(
 
     var oldPos: Vec3 = pos
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
+    var lastTargetUpdate: Int = 0
 
     val displayElement: ItemDisplayElement = ItemDisplayElement(Blocks.SKELETON_SKULL.asItem()) // TODO: <- Config option for item type
     val elementHolder: ElementHolder = ElementHolder()
@@ -106,6 +107,9 @@ class Skull(
     }
 
     fun checkTarget() {
+        val updateTimeout = 20 // should be 1 second
+        if (server.tickCount - lastTargetUpdate < updateTimeout) return
+
         if (targetOptional.isEmpty) {
             getNewTarget(SwitchTargetReason.EMPTY_TARGET)
             return
@@ -121,6 +125,8 @@ class Skull(
 
     fun getNewTarget(reason: SwitchTargetReason) {
         Main.LOGGER.info("getting new target with $reason reason")
+        lastTargetUpdate = server.tickCount
+        
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
         playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive }
         if (playerTargets.isEmpty()) { targetOptional = Optional.empty(); return }
