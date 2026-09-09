@@ -20,15 +20,16 @@ import java.util.UUID
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class Skull(val manager: SkullManager, val level: ServerLevel) {
-
+class Skull(
+    val manager: SkullManager,
+    val level: ServerLevel,
+    var pos: Vec3,
+    var targetOptional: Optional<Player> = Optional.empty()
+) {
     val server: MinecraftServer = level.server
     var uuid: UUID = UUID.randomUUID()
 
-    var pos: Vec3 = Vec3.ZERO
-    var oldPos: Vec3 = Vec3.ZERO
-
-    var targetOptional: Optional<Entity> = Optional.empty()
+    var oldPos: Vec3 = pos
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
 
     val displayElement: ItemDisplayElement = ItemDisplayElement(Blocks.SKELETON_SKULL.asItem()) // TODO: <- Config option for item type

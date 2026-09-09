@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.Permission
 import net.minecraft.server.permissions.Permissions
 import one.theaq.skull.Main
+import java.util.Optional
 
 abstract class BaseCommand {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
@@ -49,7 +50,14 @@ abstract class BaseCommand {
             } catch (_: IllegalArgumentException) {
                 default
             }
+        }
 
+        fun <T: Any> getOptionalOfType(context: CommandContext<*>, name: String, type: Class<T>): Optional<T> {
+            return try {
+                Optional.of(context.getArgument<T>(name, type))
+            } catch (_: IllegalArgumentException) {
+                Optional.empty()
+            }
         }
     }
 }

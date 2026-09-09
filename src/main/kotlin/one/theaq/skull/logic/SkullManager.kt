@@ -2,8 +2,9 @@ package one.theaq.skull.logic
 
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import java.util.UUID
+import java.util.Optional
 
 class SkullManager {
 
@@ -11,12 +12,11 @@ class SkullManager {
     private val markedForRemoval: MutableList<Skull> = mutableListOf()
 
     fun createSkull(level: ServerLevel): Skull {
-        return this.createSkull(level, Vec3(0.0, 0.0, 0.0))
+        return this.createSkull(level)
     }
 
-    fun createSkull(level: ServerLevel, pos: Vec3): Skull  {
-        val skull = Skull(this, level)
-        skull.pos = pos
+    fun createSkull(level: ServerLevel, pos: Vec3 = Vec3(0.0, 0.0, 0.0), target: Optional<Player> = Optional.empty()): Skull  {
+        val skull = Skull(this, level, pos, target)
 
         skulls += skull
         return skull
