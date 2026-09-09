@@ -83,7 +83,7 @@ class Skull(
     fun render() {
         val holderWatching = holderAttachment.holder().watchingPlayers
         val nearbyPlayers = level.players().filter { it.eyePosition.distanceTo(this.pos) < 128 }
-        holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) } // TODO: Prob breaks with immersive portals
+        holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) }
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
         holderAttachment.tick()
@@ -126,7 +126,7 @@ class Skull(
     fun getNewTarget(reason: SwitchTargetReason) {
         Main.LOGGER.info("getting new target with $reason reason")
         lastTargetUpdate = server.tickCount
-        
+
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
         playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive }
         if (playerTargets.isEmpty()) { targetOptional = Optional.empty(); return }
@@ -147,7 +147,8 @@ class Skull(
     }
 
     /**
-     *  Use [removeSkull(skull: Skull)][SkullManager.removeSkull] instead
+     *  Use [removeSkull(skull: Skull)][SkullManager.removeSkull] to remove skull
+     *  removes skulls from holderAttachments
      */
     fun destroy() {
         holderAttachment.destroy()
