@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
+import one.theaq.skull.Main
 import one.theaq.skull.util.SkullMath
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -22,6 +23,7 @@ import kotlin.math.sqrt
 class Skull(val manager: SkullManager, val level: ServerLevel) {
 
     val server: MinecraftServer = level.server
+    var uuid: UUID = UUID.randomUUID()
 
     var pos: Vec3 = Vec3.ZERO
     var oldPos: Vec3 = Vec3.ZERO
@@ -83,10 +85,15 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
         nearbyPlayers.forEach { holderAttachment.startWatching(it) }
 
         holderAttachment.tick()
+
+        // position
+        val posTranslation = oldPos.subtract(pos).add(0.0, 0.25, 0.0)
+        displayElement.translation = posTranslation.toVector3f()
+
+        // rotation
         if (targetOptional.isEmpty) return
         val target = targetOptional.get()
 
-        // rotation
         val targetDelta = pos.subtract(target.eyePosition)
         val pitch = (atan2(sqrt(targetDelta.z * targetDelta.z + targetDelta.x * targetDelta.x), targetDelta.y) - Math.PI/2).toFloat()
         val yaw = (atan2(targetDelta.z, targetDelta.x) - Math.PI/2).toFloat()
@@ -94,31 +101,31 @@ class Skull(val manager: SkullManager, val level: ServerLevel) {
         val quaternionYaw = Quaternionf().fromAxisAngleRad(0.0f, -1.0f, 0.0f, yaw)
         displayElement.leftRotation = quaternionYaw.mul(quaternionPitch)
 
-        // position
-        val posTranslation = oldPos.subtract(pos).add(0.0, 0.25, 0.0)
-        displayElement.translation = posTranslation.toVector3f()
-
         displayElement.startInterpolation()
     }
 
     fun checkTarget() {
-        targetOptional = when {
-            !targetOptional.isPresent -> getNewTarget(SwitchTargetReason.EMPTY_TARGET)
-            !server.playerList.players.contains(targetOptional.get()) -> getNewTarget(SwitchTargetReason.LEFT_SERVER)
-            !level.getPlayers { true }.contains(targetOptional.get()) -> getNewTarget(SwitchTargetReason.DIFFERENT_DIMENSION)
-            !targetOptional.get().isAlive -> getNewTarget(SwitchTargetReason.DIED)
-            targetOptional.get().isSpectator -> getNewTarget(SwitchTargetReason.SPECTATOR)
-            else -> Optional.empty()
+        if (targetOptional.isEmpty) {
+            getNewTarget(SwitchTargetReason.EMPTY_TARGET)
+            return
+        }
+
+        when {
+            !server.playerList.players.contains(targetOptional.get())   -> getNewTarget(SwitchTargetReason.LEFT_SERVER)
+            !level.getPlayers { true }.contains(targetOptional.get())   -> getNewTarget(SwitchTargetReason.DIFFERENT_DIMENSION)
+            !targetOptional.get().isAlive                               -> getNewTarget(SwitchTargetReason.DIED)
+            targetOptional.get().isSpectator                            -> getNewTarget(SwitchTargetReason.SPECTATOR)
         }
     }
 
-    fun getNewTarget(reason: SwitchTargetReason): Optional<Entity> {
+    fun getNewTarget(reason: SwitchTargetReason) {
+        Main.LOGGER.info("getting new target with $reason reason")
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
         playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive }
-        if (playerTargets.isEmpty()) return Optional.empty()
+        if (playerTargets.isEmpty()) { targetOptional = Optional.empty(); return }
 
         val newTarget: Player = playerTargets.random()
-        return Optional.of(newTarget)
+        targetOptional = Optional.of(newTarget)
     }
 
     fun onCollision(collider: Entity) {
