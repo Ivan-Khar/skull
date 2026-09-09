@@ -81,6 +81,7 @@ class Skull(
     }
 
     fun render() {
+        // might be too expensive tbh but should be fine
         val holderWatching = holderAttachment.holder().watchingPlayers
         val nearbyPlayers = level.players().filter { it.eyePosition.distanceTo(this.pos) < 128 }
         holderWatching.filter { it.player !in nearbyPlayers }.forEach { holderAttachment.stopWatching(it) }
