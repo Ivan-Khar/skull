@@ -60,11 +60,11 @@ class SkullCommand: BaseCommand() {
 
     fun listSkulls(context: CommandContext<CommandSourceStack>): Int {
         val skulls = skullManager.getAllSkulls()
-        val textResponse = Component.literal("Skull list: \n")
+        val textResponse = Component.literal("Skull list:")
         val expanded = getOrDefault(context, "expand", false)
 
         skulls.forEach {
-            textResponse.append("${it.uuid.toString().substring(0.. if (expanded) 35 else 7)} at ${String.format("%.2f %.2f %.2f", it.pos.x, it.pos.y, it.pos.z)} ${ if (it.targetOptional.isPresent) "targeting ${it.targetOptional.get().displayName.string}" else "searching for target" }\n")
+            textResponse.append("\n${it.uuid.toString().substring(0.. if (expanded) 35 else 7)} at ${String.format("%.2f %.2f %.2f", it.pos.x, it.pos.y, it.pos.z)} ${ if (it.targetOptional.isPresent) "targeting ${it.targetOptional.get().displayName.string}" else "searching for target" }")
         }
 
         context.source.sendSystemMessage(textResponse)
