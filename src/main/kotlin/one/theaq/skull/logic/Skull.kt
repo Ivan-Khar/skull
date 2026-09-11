@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
 import one.theaq.skull.Main
 import one.theaq.skull.config.Configs
@@ -35,7 +35,7 @@ class Skull(
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
     var lastTargetUpdate: Int = 0
 
-    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skullItem)
+    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skullBlock.asItem())
     val elementHolder: ElementHolder = ElementHolder()
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
@@ -46,6 +46,7 @@ class Skull(
         displayElement.teleportDuration = 5
         displayElement.setDisplaySize(0.5f, 0.5f)
         displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
+        displayElement.itemDisplayContext = ItemDisplayContext.HEAD
         elementHolder.addElement(displayElement)
     }
 

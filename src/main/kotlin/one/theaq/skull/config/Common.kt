@@ -9,10 +9,10 @@ import one.theaq.skull.Main
 class Common: Config(
     identifier = Main.location("common"),
     folder = "theaq",
-    name = "${Main.MOD_ID}-common") {
-
+    name = "${Main.MOD_ID}-common"
+) {
     var skullSpeed = 1.0 // Block/Sec
-    var skullItem = Blocks.SKELETON_SKULL.asItem()
+    var skullBlock = Blocks.SKELETON_SKULL
     var skullTimeoutOnNoTargets = 100 //ticks
     var skullDisappearsOnKill = false
     var skullPlayerGracePeriod = 200
