@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
 import one.theaq.skull.Main
+import one.theaq.skull.config.Configs
 import one.theaq.skull.util.SkullMath
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -27,15 +28,18 @@ class Skull(
     var targetOptional: Optional<Player> = Optional.empty()
 ) {
     val server: MinecraftServer = level.server
+    val config = Configs.COMMON
     var uuid: UUID = UUID.randomUUID()
 
     var oldPos: Vec3 = pos
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
     var lastTargetUpdate: Int = 0
 
-    val displayElement: ItemDisplayElement = ItemDisplayElement(Blocks.SKELETON_SKULL.asItem()) // TODO: <- Config option for item type
+    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skullItem)
     val elementHolder: ElementHolder = ElementHolder()
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
+
+    val baseSpeed: Double = config.skullSpeed / 20
 
     init {
         displayElement.interpolationDuration = 2
@@ -46,7 +50,7 @@ class Skull(
     }
 
     fun tick() {
-        recentlyKilled.values.removeAll { tick -> server.tickCount - tick > 200 }
+        recentlyKilled.values.removeAll { tick -> server.tickCount - tick > config.skullPlayerGracePeriod }
 
         checkTarget()
         render()
@@ -63,7 +67,7 @@ class Skull(
         val targetDelta = targetPos.subtract(pos)
         val targetVector = targetPos.subtract(pos).normalize()
         val targetDistance = targetDelta.length()
-        val baseSpeed = 0.05 // TODO: <- Config option
+
         val speed = when {
             targetDistance < 16.0 -> baseSpeed
             targetDistance in 16.0..64.0 -> SkullMath.map(targetDistance, 16.0, 64.0, baseSpeed, baseSpeed * 10)
@@ -108,7 +112,7 @@ class Skull(
     }
 
     fun checkTarget() {
-        val updateTimeout = 20 // should be 1 second
+        val updateTimeout = config.skullTimeoutOnNoTargets
         if (server.tickCount - lastTargetUpdate < updateTimeout) return
 
         if (targetOptional.isEmpty) {
@@ -141,7 +145,7 @@ class Skull(
         val target = targetOptional.get()
 
         if (!target.isAlive) return
-        manager.removeSkull(this) // TODO: <- Config option
+        if (config.skullDisappearsOnKill) manager.removeSkull(this)
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
         collider.kill(level)
         targetOptional = Optional.empty()

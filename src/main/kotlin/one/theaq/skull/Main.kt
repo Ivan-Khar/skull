@@ -3,6 +3,7 @@ package one.theaq.skull
 //~identifier
 import net.minecraft.resources.Identifier
 import one.theaq.skull.command.CommandRegistry
+import one.theaq.skull.config.Configs
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -12,6 +13,7 @@ object Main {
 
     fun initialize() {
         CommandRegistry
+        Configs
 
         LOGGER.info("$MOD_ID initialized")
     }
