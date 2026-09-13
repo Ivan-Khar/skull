@@ -22,9 +22,9 @@ class Common: Config(
 
         var speed = MovementSpeed()
         class MovementSpeed: ConfigSection() {
-            var baseSpeed       = 1.0
-            var fastSpeed       = 10.0
-            var fasterSpeed     = 200.0
+            var baseSpeed       = 0.05
+            var fastSpeed       = 0.5
+            var fasterSpeed     = 20.0
             var fastestSpeed    = 500.0
         }
     }

@@ -68,8 +68,8 @@ class Skull(
 
         val speed = when {
             targetDistance in 16.0..64.0 -> config.skull.speed.fastSpeed
-            targetDistance in 64.0..1024.0 -> config.skull.speed.fasterSpeed
-            targetDistance > 1024.0 -> config.skull.speed.fastestSpeed
+            targetDistance in 64.0..512.0 -> config.skull.speed.fasterSpeed
+            targetDistance > 512.0 -> config.skull.speed.fastestSpeed
             else -> config.skull.speed.baseSpeed
         }
 
