@@ -6,16 +6,15 @@ import eu.pb4.polymer.virtualentity.api.attachment.ManualAttachment
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.Entity
+import net.minecraft.world.damagesource.DamageSources
 import net.minecraft.world.entity.EntitySelector
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
 import one.theaq.skull.Main
 import one.theaq.skull.config.Configs
-import one.theaq.skull.util.SkullMath
 import org.joml.Quaternionf
-import org.joml.Vector3f
 import java.util.Optional
 import java.util.UUID
 import kotlin.math.atan2
@@ -35,23 +34,20 @@ class Skull(
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
     var lastTargetUpdate: Int = 0
 
-    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skullBlock.asItem())
+    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skull.block.asItem())
     val elementHolder: ElementHolder = ElementHolder()
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
-
-    val baseSpeed: Double = config.skullSpeed / 20
 
     init {
         displayElement.interpolationDuration = 2
         displayElement.teleportDuration = 5
         displayElement.setDisplaySize(0.5f, 0.5f)
-        displayElement.scale = Vector3f(1.0f, 1.0f, 1.0f)
         displayElement.itemDisplayContext = ItemDisplayContext.HEAD
         elementHolder.addElement(displayElement)
     }
 
     fun tick() {
-        recentlyKilled.values.removeAll { tick -> server.tickCount - tick > config.skullPlayerGracePeriod }
+        recentlyKilled.values.removeAll { tick -> server.tickCount - tick > config.skull.playerGracePeriod }
 
         checkTarget()
         render()
@@ -70,19 +66,18 @@ class Skull(
         val targetDistance = targetDelta.length()
 
         val speed = when {
-            targetDistance < 16.0 -> baseSpeed
-            targetDistance in 16.0..64.0 -> SkullMath.map(targetDistance, 16.0, 64.0, baseSpeed, baseSpeed * 10)
-            targetDistance in 64.0..1024.0 -> SkullMath.map(targetDistance, 64.0, 1024.0, baseSpeed * 10, baseSpeed * 200)
-            targetDistance > 1024.0 -> baseSpeed * 500
-            else -> baseSpeed
+            targetDistance in 16.0..64.0 -> config.skull.speed.fastSpeed
+            targetDistance in 64.0..1024.0 -> config.skull.speed.fasterSpeed
+            targetDistance > 1024.0 -> config.skull.speed.fastestSpeed
+            else -> config.skull.speed.baseSpeed
         }
 
         this.pos = pos.add(targetVector.scale(speed))
     }
 
     fun checkCollisions() {
-        val collidingEntities = level.allEntities.filter { it.eyePosition.distanceTo(this.oldPos) < 0.5 }
-        collidingEntities.forEach { onCollision(it) }
+        val collidingEntities = level.allEntities.filter { it.eyePosition.distanceTo(this.oldPos) < 0.5 && it is LivingEntity }
+        collidingEntities.forEach { onCollision(it as LivingEntity) }
     }
 
     fun render() {
@@ -113,7 +108,7 @@ class Skull(
     }
 
     fun checkTarget() {
-        val updateTimeout = config.skullTimeoutOnNoTargets
+        val updateTimeout = config.skull.timeoutOnNoTargets
         if (server.tickCount - lastTargetUpdate < updateTimeout) return
 
         if (targetOptional.isEmpty) {
@@ -141,14 +136,21 @@ class Skull(
         targetOptional = Optional.of(newTarget)
     }
 
-    fun onCollision(collider: Entity) {
+    fun onCollision(collider: LivingEntity) {
         if (targetOptional.isEmpty || collider.uuid != targetOptional.get().uuid) return
         val target = targetOptional.get()
 
         if (!target.isAlive) return
-        if (config.skullDisappearsOnKill) manager.removeSkull(this)
+
+        killEntity(collider)
+    }
+
+    fun killEntity(target: LivingEntity) {
+        if (config.skull.disappearOnKill) manager.removeSkull(this)
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
-        collider.kill(level)
+
+        //target.combatTracker.recordDamage(, 100000f)
+        target.kill(level)
         targetOptional = Optional.empty()
     }
 

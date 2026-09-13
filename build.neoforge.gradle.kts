@@ -33,6 +33,11 @@ val loader: String by project
 base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
+    fun implementAndInclude(dependency: String) {
+        implementation(dependency)
+        jarJar(dependency)
+    }
+
     fletchingTable.minecraft = mc("version")
 
     runtimeOnly("thedarkcolour:kotlinforforge-neoforge:${deps("kotlinforforge-neoforge")}")
