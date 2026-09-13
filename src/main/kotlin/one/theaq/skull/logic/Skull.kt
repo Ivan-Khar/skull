@@ -7,6 +7,7 @@ import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.damagesource.DamageSources
+import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -149,7 +150,8 @@ class Skull(
         if (config.skull.disappearOnKill) manager.removeSkull(this)
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
 
-        //target.combatTracker.recordDamage(, 100000f)
+        val damageSource = target.damageSources().source(DamageTypes.WITHER_SKULL)
+        target.combatTracker.recordDamage(damageSource, 100000f)
         target.kill(level)
         targetOptional = Optional.empty()
     }
