@@ -1,11 +1,9 @@
 package one.theaq.skull.data
 
 //? if fabric {
-import dev.kikugie.fletching_table.fabric.Entrypoint
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 
-@Entrypoint("fabric-datagen")
 class MainDatagen : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
 
