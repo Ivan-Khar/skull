@@ -153,16 +153,9 @@ class Skull(
         if (config.skull.disappearOnKill) manager.removeSkull(this)
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
 
-        val damageSource = target.damageSources().source(DamageTypes.GENERIC)
-        if (!target.isRemoved && !target.isDeadOrDying) {
-            val targetAccessor = (target as Any) as LivingEntityAccessor
-            if (target.isSleeping) target.stopSleeping()
-            target.stopUsingItem()
-            targetAccessor.`skull$handleKillingBlow`()
-            target.combatTracker.recheckStatus()
-            targetAccessor.`skull$dropAllDeathLoot`(level, damageSource)
-            target.pose = Pose.DYING
-        }
+        val damageSource = target.damageSources().source(DamageTypes.GENERIC_KILL)
+
+        target.hurtServer(level, damageSource, Float.MAX_VALUE)
 
         server.playerList.players.forEach { player ->
             player.sendSystemMessage(Component.translatable("skull.kill", target.displayName))
