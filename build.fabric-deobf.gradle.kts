@@ -1,15 +1,14 @@
 @file:Suppress("UnstableApiUsage")
 
+import dev.kikugie.fletching_table.annotation.MixinEnvironment
 import multiloader.utils.*
-import org.jetbrains.kotlin.gradle.idea.proto.com.google.protobuf.mixin
 
 plugins {
     kotlin("jvm")
     id("multiloader.common")
     id("net.fabricmc.fabric-loom")
     id("com.google.devtools.ksp") version "2.3.9"
-    alias(ft.plugins.default)
-    alias(ft.plugins.fabric)
+    id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
     id("com.github.gmazzo.buildconfig") version "5.7.1"
 }
 
@@ -120,15 +119,20 @@ loom {
 }
 
 fletchingTable {
-    fabric.configure(sourceSets.main) {
-        entrypoint("fabric-datagen", "net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint")
-        entrypoint("fabric-client-gametest", "net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest")
+    fabric {
+        entrypointMappings.put("fabric-datagen", "net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint")
+        entrypointMappings.put(
+            "fabric-client-gametest",
+            "net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest"
+        )
     }
 
-    mixins.configure(sourceSets.main) {
-        mixin("skull.mixins.json") { env("MAIN") }
-        mixin("skull.client.mixins.json", "client") { env("CLIENT") }
-        mixin("skull.fabric.mixins.json", "fabric") { env("MAIN") }
+    mixins.register("main") {
+        mixin("default", "skull.mixins.json")
+        mixin("client", "skull.client.mixins.json") {
+            environment = MixinEnvironment.Env.CLIENT
+        }
+        mixin("fabric", "skull.fabric.mixins.json")
     }
 }
 

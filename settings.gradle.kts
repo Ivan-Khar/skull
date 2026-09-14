@@ -14,16 +14,6 @@ plugins {
     id("dev.kikugie.stonecutter") version "0.9.8"
 }
 
-dependencyResolutionManagement {
-    repositories {
-        maven("https://maven.kikugie.dev/snapshots")
-    }
-
-    versionCatalogs {
-        create("ft") { from("dev.kikugie.fletching-table:fletching-table.catalog:0.2-SNAPSHOT") }
-    }
-}
-
 stonecutter {
     create(rootProject) {
         fun mc(mcVersion: String, name: String = mcVersion, deobfuscated: Boolean = false, loaders: Iterable<String>) =

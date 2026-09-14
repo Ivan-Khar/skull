@@ -1,3 +1,4 @@
+import dev.kikugie.fletching_table.annotation.MixinEnvironment
 import multiloader.utils.*
 
 plugins {
@@ -5,7 +6,7 @@ plugins {
     id("net.neoforged.moddev")
     id("multiloader.common")
     id("com.google.devtools.ksp") version "2.3.9"
-    alias(ft.plugins.default)
+    id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.22"
     id("com.github.gmazzo.buildconfig") version "5.7.1"
 }
 
@@ -135,9 +136,11 @@ neoForge {
 }
 
 fletchingTable {
-    mixins.configure(sourceSets.main) {
-        mixin("skull.mixins.json", "default")
-        mixin("skull.client.mixins.json", "client") { env("CLIENT") }
+    mixins.register("main") {
+        mixin("default", "skull.mixins.json")
+        mixin("client", "skull.client.mixins.json") {
+            environment = MixinEnvironment.Env.CLIENT
+        }
     }
 }
 
