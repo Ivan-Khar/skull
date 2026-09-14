@@ -1,0 +1,10 @@
+{
+  "skull.command.spawn": "Spawned skull %s at %s %s",
+  "skull.command.spawn.target.player": "targeting %s",
+  "skull.command.list.header": "Skull list:",
+  "skull.command.list.value": "%s at %s, %s",
+  "skull.command.list.target.player": "targeting %s",
+  "skull.command.list.target.searching": "searching for target",
+  "skull.command.delete": "Deleted %s skull",
+  "skull.command.deleteall": "Deleted all skulls"
+}

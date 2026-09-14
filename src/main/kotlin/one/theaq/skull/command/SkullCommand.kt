@@ -91,13 +91,13 @@ class SkullCommand: BaseCommand() {
         }
 
         context.source.sendSystemMessage(Main.translatable("command.delete"))
-        return 0
+        return removedSkulls
     }
 
     fun deleteAllSkulls(context: CommandContext<CommandSourceStack>): Int {
-        skullManager.removeAllSkulls()
+        val skullCount = skullManager.removeAllSkulls()
 
         context.source.sendSystemMessage(Main.translatable("command.deleteall"))
-        return 0
+        return skullCount
     }
 }
