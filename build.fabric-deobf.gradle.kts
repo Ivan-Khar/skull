@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import multiloader.utils.*
+import org.jetbrains.kotlin.gradle.idea.proto.com.google.protobuf.mixin
 
 plugins {
     kotlin("jvm")
@@ -125,7 +126,7 @@ fletchingTable {
     }
 
     mixins.configure(sourceSets.main) {
-        mixin("skull.mixins.json", "default")
+        mixin("skull.mixins.json")
         mixin("skull.client.mixins.json", "client") { env("CLIENT") }
         mixin("skull.fabric.mixins.json", "fabric")
     }

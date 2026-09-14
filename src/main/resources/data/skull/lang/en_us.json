@@ -6,5 +6,6 @@
   "skull.command.list.target.player": "targeting %s",
   "skull.command.list.target.searching": "searching for target",
   "skull.command.delete": "Deleted %s skull",
-  "skull.command.deleteall": "Deleted all skulls"
+  "skull.command.deleteall": "Deleted all skulls",
+  "skull.kill": "%s was fucking killed idk lmfao theres gonna be different message"
 }
