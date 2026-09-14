@@ -1,6 +1,6 @@
 # 💀
 
-i should like... actually start doing this
+this is almost kind of done woah 
 
 # Credits
 
