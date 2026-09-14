@@ -138,6 +138,7 @@ neoForge {
 fletchingTable {
     mixins.register("main") {
         mixin("default", "skull.mixins.json")
+        mixin("client", "skull.client.mixins.json") { environment = MixinEnvironment.Env.CLIENT }
     }
 }
 
