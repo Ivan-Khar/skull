@@ -10,6 +10,7 @@ class SkullManager {
 
     private val skulls: MutableList<Skull> = mutableListOf()
     private val markedForRemoval: MutableList<Skull> = mutableListOf()
+    private val playersKilled: MutableList<UUID> = mutableListOf()
 
     fun createSkull(level: ServerLevel): Skull {
         return this.createSkull(level)
@@ -52,6 +53,14 @@ class SkullManager {
         skulls.forEach {
             it.tick()
         }
+    }
+
+    fun addToKilledPlayers(uuid: UUID) {
+        playersKilled.add(uuid)
+    }
+
+    fun removeFromKilledPlayers(uuid: UUID): Boolean {
+        return playersKilled.remove(uuid)
     }
 
     companion object {

@@ -12,6 +12,6 @@ public class MinecraftServerMixin {
 
     @Inject(at = @At("HEAD"), method = "loadLevel")
     private void init(CallbackInfo info) {
-         Main.INSTANCE.getLOGGER().info("wheres my mixins");
+         Main.INSTANCE.getLOGGER().info("my mixins work :steamhappy:");
     }
 }

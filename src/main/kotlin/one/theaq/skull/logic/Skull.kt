@@ -7,17 +7,12 @@ import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.damagesource.DamageSources
-import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
-import one.theaq.skull.Main
 import one.theaq.skull.config.Configs
-import one.theaq.skull.mixin.LivingEntityAccessor
 import org.joml.Quaternionf
 import java.util.Optional
 import java.util.UUID
@@ -129,7 +124,6 @@ class Skull(
     }
 
     fun getNewTarget(reason: SwitchTargetReason) {
-        Main.LOGGER.info("getting new target with $reason reason")
         lastTargetUpdate = server.tickCount
 
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
@@ -151,15 +145,11 @@ class Skull(
 
     fun killEntity(target: LivingEntity) {
         if (config.skull.disappearOnKill) manager.removeSkull(this)
+
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
+        manager.addToKilledPlayers(target.uuid)
+        target.kill(level)
 
-        val damageSource = target.damageSources().source(DamageTypes.GENERIC_KILL)
-
-        target.hurtServer(level, damageSource, Float.MAX_VALUE)
-
-        server.playerList.players.forEach { player ->
-            player.sendSystemMessage(Component.translatable("skull.kill", target.displayName))
-        }
         targetOptional = Optional.empty()
     }
 

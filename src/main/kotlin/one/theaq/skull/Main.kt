@@ -1,8 +1,6 @@
 package one.theaq.skull
 
 //~identifier
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import one.theaq.skull.command.CommandRegistry
 import one.theaq.skull.config.Configs

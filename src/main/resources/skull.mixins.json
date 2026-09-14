@@ -3,8 +3,9 @@
     "required": true,
     "minVersion": "0.8",
     "mixins": [
-        "MinecraftServerMixin",
-        "LivingEntityAccessor"
+        "CombatTrackerMixin",
+        "LivingEntityAccessor",
+        "MinecraftServerMixin"
     ],
     "injectors": {
         "defaultRequire": 1
