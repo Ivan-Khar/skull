@@ -55,15 +55,15 @@ class SkullCommand: BaseCommand() {
         
         val skull = skullManager.createSkull(context.source.level, position, target)
         val uuid = skull.uuid.toString()
-        val targetName = if (target.isPresent) Main.translatable("command.spawn.target.player", target.get().displayName.string) else ""
+        val targetName = if (target.isPresent) Component.translatable("skull.command.spawn.target.player", target.get().displayName.string) else ""
 
-        context.source.sendSystemMessage(Main.translatable("command.spawn", uuid, skull.pos, targetName))
+        context.source.sendSystemMessage(Component.translatable("skull.command.spawn", uuid, skull.pos.toString(), targetName.toString()))
         return 0
     }
 
     fun listSkulls(context: CommandContext<CommandSourceStack>): Int {
         val skulls = skullManager.getAllSkulls()
-        val textResponse = Main.translatable("command.list.header")
+        val textResponse = Component.translatable("skull.command.list.header")
         val expanded = getOrDefault(context, "expand", false)
 
         skulls.forEach {
@@ -71,11 +71,11 @@ class SkullCommand: BaseCommand() {
             val uuidShort = uuid.substring(0..7)
 
             textResponse.append(
-                Main.translatable("command.list.value",
+                Component.translatable("skull.command.list.value",
                     if (expanded) uuid else uuidShort,
                     String.format("%.2f %.2f %.2f", it.pos.x, it.pos.y, it.pos.z),
-                    if (it.targetOptional.isPresent) Main.translatable("command.list.target.player", it.targetOptional.get().displayName.string)
-                    else Main.translatable("command.list.target.searching")
+                    if (it.targetOptional.isPresent) Component.translatable("skull.command.list.target.player", it.targetOptional.get().displayName.string)
+                    else Component.translatable("skull.command.list.target.searching")
                 )
             )
         }
@@ -90,14 +90,14 @@ class SkullCommand: BaseCommand() {
             skullManager.removeSkull(it) >= 0
         }
 
-        context.source.sendSystemMessage(Main.translatable("command.delete"))
+        context.source.sendSystemMessage(Component.translatable("skull.command.delete", removedSkulls))
         return removedSkulls
     }
 
     fun deleteAllSkulls(context: CommandContext<CommandSourceStack>): Int {
         val skullCount = skullManager.removeAllSkulls()
 
-        context.source.sendSystemMessage(Main.translatable("command.deleteall"))
+        context.source.sendSystemMessage(Component.translatable("skull.command.deleteall"))
         return skullCount
     }
 }

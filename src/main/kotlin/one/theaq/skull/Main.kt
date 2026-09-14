@@ -27,13 +27,4 @@ object Main {
     fun commonLocation(path: String): Identifier {
         return Identifier.fromNamespaceAndPath("c", path)
     }
-
-    fun translatable(translation: String): MutableComponent {
-        return Component.translatable("$MOD_ID.$translation")
-    }
-
-    fun translatable(translation: String, vararg args: Any): MutableComponent {
-        return Component.translatable("$MOD_ID.$translation", args)
-    }
-
 }
