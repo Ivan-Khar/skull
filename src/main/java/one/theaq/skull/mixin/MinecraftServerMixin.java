@@ -1,6 +1,5 @@
 package one.theaq.skull.mixin;
 
-import dev.kikugie.fletching_table.mixin.MixinEnvironment;
 import net.minecraft.server.MinecraftServer;
 import one.theaq.skull.Main;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@MixinEnvironment("default")
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
 

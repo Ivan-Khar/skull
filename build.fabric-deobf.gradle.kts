@@ -126,9 +126,9 @@ fletchingTable {
     }
 
     mixins.configure(sourceSets.main) {
-        mixin("skull.mixins.json")
+        mixin("skull.mixins.json") { env("MAIN") }
         mixin("skull.client.mixins.json", "client") { env("CLIENT") }
-        mixin("skull.fabric.mixins.json", "fabric")
+        mixin("skull.fabric.mixins.json", "fabric") { env("MAIN") }
     }
 }
 
