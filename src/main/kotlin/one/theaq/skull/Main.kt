@@ -1,6 +1,8 @@
 package one.theaq.skull
 
 //~identifier
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import one.theaq.skull.command.CommandRegistry
 import one.theaq.skull.config.Configs
@@ -25,4 +27,13 @@ object Main {
     fun commonLocation(path: String): Identifier {
         return Identifier.fromNamespaceAndPath("c", path)
     }
+
+    fun translatable(translation: String): MutableComponent {
+        return Component.translatable("$MOD_ID.$translation")
+    }
+
+    fun translatable(translation: String, vararg args: Any): MutableComponent {
+        return Component.translatable("$MOD_ID.$translation", args)
+    }
+
 }

@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.Permission
 import net.minecraft.server.permissions.Permissions
 import net.minecraft.world.entity.player.Player
+import one.theaq.skull.Main
 import one.theaq.skull.logic.SkullManager
 import java.util.Optional
 
@@ -53,18 +54,30 @@ class SkullCommand: BaseCommand() {
             else Optional.of(targetSelector.get().findSinglePlayer(context.source) as Player)
         
         val skull = skullManager.createSkull(context.source.level, position, target)
+        val uuid = skull.uuid.toString()
+        val targetName = if (target.isPresent) Main.translatable("command.spawn.target.player", target.get().displayName.string) else ""
 
-        context.source.sendSystemMessage(Component.literal("Spawned skull ${skull.uuid} at ${skull.pos} targeting $target"))
+        context.source.sendSystemMessage(Main.translatable("command.spawn", uuid, skull.pos, targetName))
         return 0
     }
 
     fun listSkulls(context: CommandContext<CommandSourceStack>): Int {
         val skulls = skullManager.getAllSkulls()
-        val textResponse = Component.literal("Skull list:")
+        val textResponse = Main.translatable("command.list.header")
         val expanded = getOrDefault(context, "expand", false)
 
         skulls.forEach {
-            textResponse.append("\n${it.uuid.toString().substring(0.. if (expanded) 35 else 7)} at ${String.format("%.2f %.2f %.2f", it.pos.x, it.pos.y, it.pos.z)} ${ if (it.targetOptional.isPresent) "targeting ${it.targetOptional.get().displayName.string}" else "searching for target" }")
+            val uuid = it.uuid.toString()
+            val uuidShort = uuid.substring(0..7)
+
+            textResponse.append(
+                Main.translatable("command.list.value",
+                    if (expanded) uuid else uuidShort,
+                    String.format("%.2f %.2f %.2f", it.pos.x, it.pos.y, it.pos.z),
+                    if (it.targetOptional.isPresent) Main.translatable("command.list.target.player", it.targetOptional.get().displayName.string)
+                    else Main.translatable("command.list.target.searching")
+                )
+            )
         }
 
         context.source.sendSystemMessage(textResponse)
@@ -77,14 +90,14 @@ class SkullCommand: BaseCommand() {
             skullManager.removeSkull(it) >= 0
         }
 
-        context.source.sendSystemMessage(Component.literal("Destroyed $removedSkulls skulls"))
+        context.source.sendSystemMessage(Main.translatable("command.delete"))
         return 0
     }
 
     fun deleteAllSkulls(context: CommandContext<CommandSourceStack>): Int {
         skullManager.removeAllSkulls()
 
-        context.source.sendSystemMessage(Component.literal("Destroyed all skulls"))
+        context.source.sendSystemMessage(Main.translatable("command.deleteall"))
         return 0
     }
 }
