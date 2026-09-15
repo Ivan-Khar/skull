@@ -10,6 +10,6 @@
   "skull.command.deleteall": "Deleted all skulls",
   "skull.targeting.notification": "You feel something watching you",
   "skull.blocked.gamemode": "Some weird force is blocking you from doing that",
-  "skull.blocked.dimensiontp": "Something is pushing you away from that dimension",
+  "skull.blocked.dimensiontp": "Something is blocking you from changing dimensions",
   "skull.kill": "%s is gone"
 }
