@@ -65,10 +65,10 @@ class Skull(
         val targetDistance = targetDelta.length()
 
         val speed = when {
-            targetDistance in 16.0..64.0 -> config.skull.speed.fastSpeed
-            targetDistance in 64.0..512.0 -> config.skull.speed.fasterSpeed
-            targetDistance > 512.0 -> config.skull.speed.fastestSpeed
-            else -> config.skull.speed.baseSpeed
+            targetDistance in 16.0..64.0 -> config.skull.fastSpeed
+            targetDistance in 64.0..512.0 -> config.skull.fasterSpeed
+            targetDistance > 512.0 -> config.skull.fastestSpeed
+            else -> config.skull.baseSpeed
         }
 
         this.pos = pos.add(targetVector.scale(speed))

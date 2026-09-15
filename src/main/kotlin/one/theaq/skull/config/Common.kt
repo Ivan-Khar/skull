@@ -3,6 +3,7 @@ package one.theaq.skull.config
 import me.fzzyhmstrs.fzzy_config.api.FileType
 import me.fzzyhmstrs.fzzy_config.api.SaveType
 import me.fzzyhmstrs.fzzy_config.config.Config
+import me.fzzyhmstrs.fzzy_config.config.ConfigGroup
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection
 import net.minecraft.world.level.block.Blocks
 import one.theaq.skull.Main
@@ -15,18 +16,18 @@ class Common: Config(
 
     var skull = SkullSection()
     class SkullSection: ConfigSection() {
-        var block               = Blocks.SKELETON_SKULL
-        var timeoutOnNoTargets  = 100
-        var disappearOnKill     = false
-        var playerGracePeriod   = 200
+        var block                   = Blocks.SKELETON_SKULL
+        var timeoutOnNoTargets      = 100
+        var disappearOnKill         = false
+        var playerGracePeriod       = 200
+        var blocksSpectatorSwitch   = false
+        var blocksDimensionSwitch   = false
 
-        var speed = MovementSpeed()
-        class MovementSpeed: ConfigSection() {
-            var baseSpeed       = 0.05
-            var fastSpeed       = 0.5
-            var fasterSpeed     = 20.0
-            var fastestSpeed    = 500.0
-        }
+        var speedGroup = ConfigGroup("skull_speed")
+        var baseSpeed       = 0.05
+        var fastSpeed       = 0.5
+        var fasterSpeed     = 20.0
+        var fastestSpeed    = 500.0
     }
 
     override fun defaultPermLevel(): Int {
