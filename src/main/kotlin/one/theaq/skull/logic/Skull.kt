@@ -136,7 +136,7 @@ class Skull(
         if (playerTargets.isEmpty()) { clearTarget(); return }
 
         val newTarget: ServerPlayer = playerTargets.random()
-        if (config.targeting.notify) sendSubTitle(newTarget, "skull.targeting.notification")
+        if (config.messages.notifyOnTarget) sendSubTitle(newTarget, "skull.targeting.notification")
         setTarget(newTarget)
     }
 

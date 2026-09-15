@@ -14,9 +14,13 @@ class Common: Config(
     name = "${Main.MOD_ID}-common"
 ) {
 
-    var targeting = TargetingSection()
-    class TargetingSection: ConfigSection() {
-        var notify = true
+    var messages = MessagesSection()
+    class MessagesSection: ConfigSection() {
+        var notifyOnTarget = true
+
+        var killMessageGroup = ConfigGroup("kill_message")
+        var randomKillMessage = true
+        var amountOfKillMessages = 10
     }
 
     var skull = SkullSection()

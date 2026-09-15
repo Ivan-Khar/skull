@@ -8,8 +8,17 @@
   "skull.command.delete.single": "Deleted %s skull",
   "skull.command.delete.multiple": "Deleted %s skulls",
   "skull.command.deleteall": "Deleted all skulls",
-  "skull.targeting.notification": "You feel something watching you",
-  "skull.blocked.gamemode": "Some weird force is blocking you from doing that",
+  "skull.targeting.notification": "You feel like something is watching you",
+  "skull.blocked.gamemode": "Some weird force is already spectating you",
   "skull.blocked.dimensiontp": "Something is blocking you from changing dimensions",
-  "skull.kill": "%s is gone"
+  "skull.kill.0": "%s is gone",
+  "skull.kill.1": "%s is gone1",
+  "skull.kill.2": "%s is gone2",
+  "skull.kill.3": "%s is gone3",
+  "skull.kill.4": "%s is gone4",
+  "skull.kill.5": "%s is gone5",
+  "skull.kill.6": "%s is gone6",
+  "skull.kill.7": "%s is gone7",
+  "skull.kill.8": "%s is gone8",
+  "skull.kill.9": "%s is gone9"
 }
