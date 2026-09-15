@@ -14,6 +14,11 @@ class Common: Config(
     name = "${Main.MOD_ID}-common"
 ) {
 
+    var targeting = TargetingSection()
+    class TargetingSection: ConfigSection() {
+        var notify = true
+    }
+
     var skull = SkullSection()
     class SkullSection: ConfigSection() {
         var block                   = Blocks.SKELETON_SKULL

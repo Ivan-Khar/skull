@@ -5,8 +5,11 @@ import eu.pb4.polymer.virtualentity.api.attachment.HolderAttachment
 import eu.pb4.polymer.virtualentity.api.attachment.ManualAttachment
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.TextColor
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -130,8 +133,15 @@ class Skull(
         playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive }
         if (playerTargets.isEmpty()) { targetOptional = Optional.empty(); return }
 
-        val newTarget: Player = playerTargets.random()
+        val newTarget: ServerPlayer = playerTargets.random()
+        if (config.targeting.notify) notifyTarget(newTarget)
         targetOptional = Optional.of(newTarget)
+    }
+
+    fun notifyTarget(player: ServerPlayer) {
+        val titlePacket = ClientboundSetActionBarTextPacket(Component.translatable("skull.targeting.notification").withColor(TextColor.GRAY))
+
+        player.connection.send(titlePacket)
     }
 
     fun onCollision(collider: LivingEntity) {
