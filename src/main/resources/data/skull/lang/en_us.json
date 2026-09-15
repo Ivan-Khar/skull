@@ -10,6 +10,7 @@
   "skull.command.delete.multiple": "Deleted %s skulls",
   "skull.command.deleteall": "Deleted all skulls",
   "skull.targeting.notification": "You feel like something is watching you",
+  "skull.targeting.cleared": "You were freed from the curse",
   "skull.blocked.gamemode": "Some weird force is already spectating you",
   "skull.blocked.dimensiontp": "Something is blocking you from changing dimensions",
   "skull.kill.0": "%s is gone",
