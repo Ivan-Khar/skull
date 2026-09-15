@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
 import one.theaq.skull.config.Configs
@@ -27,7 +26,7 @@ class Skull(
     val manager: SkullManager,
     val level: ServerLevel,
     var pos: Vec3,
-    var targetOptional: Optional<Player> = Optional.empty()
+    var targetOptional: Optional<LivingEntity> = Optional.empty()
 ) {
     val server: MinecraftServer = level.server
     val config = Configs.COMMON
@@ -42,6 +41,8 @@ class Skull(
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
+        if (targetOptional.isPresent) manager.addToTargeted(targetOptional.get())
+
         displayElement.interpolationDuration = 2
         displayElement.teleportDuration = 5
         displayElement.setDisplaySize(0.5f, 0.5f)
@@ -132,11 +133,11 @@ class Skull(
 
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
         playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive }
-        if (playerTargets.isEmpty()) { targetOptional = Optional.empty(); return }
+        if (playerTargets.isEmpty()) { clearTarget(); return }
 
         val newTarget: ServerPlayer = playerTargets.random()
         if (config.targeting.notify) notifyTarget(newTarget)
-        targetOptional = Optional.of(newTarget)
+        setTarget(newTarget)
     }
 
     fun notifyTarget(player: ServerPlayer) {
@@ -161,6 +162,16 @@ class Skull(
         manager.addToKilledBySkull(target)
         target.kill(level)
 
+        clearTarget()
+    }
+
+    fun setTarget(entity: LivingEntity) {
+        manager.addToTargeted(entity)
+        targetOptional = Optional.of(entity)
+    }
+
+    fun clearTarget() {
+        if (targetOptional.isPresent) manager.removeFromTargeted(targetOptional.get())
         targetOptional = Optional.empty()
     }
 

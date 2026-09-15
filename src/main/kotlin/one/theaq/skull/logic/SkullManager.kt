@@ -12,11 +12,13 @@ class SkullManager {
     private val skulls: MutableList<Skull> = mutableListOf()
     private val markedForRemoval: MutableList<Skull> = mutableListOf()
     private val killedBySkull: MutableList<LivingEntity> = mutableListOf()
+    private val entityTargeted: MutableList<LivingEntity> = mutableListOf()
+
     fun createSkull(level: ServerLevel): Skull {
         return this.createSkull(level)
     }
 
-    fun createSkull(level: ServerLevel, pos: Vec3 = Vec3(0.0, 0.0, 0.0), target: Optional<Player> = Optional.empty()): Skull  {
+    fun createSkull(level: ServerLevel, pos: Vec3 = Vec3(0.0, 0.0, 0.0), target: Optional<LivingEntity> = Optional.empty()): Skull  {
         val skull = Skull(this, level, pos, target)
 
         skulls += skull
@@ -61,6 +63,14 @@ class SkullManager {
 
     fun removeFromKilledBySkull(entity: LivingEntity): Boolean {
         return killedBySkull.remove(entity)
+    }
+
+    fun addToTargeted(entity: LivingEntity) {
+        entityTargeted.add(entity)
+    }
+
+    fun removeFromTargeted(entity: LivingEntity): Boolean {
+        return entityTargeted.remove(entity)
     }
 
     companion object {

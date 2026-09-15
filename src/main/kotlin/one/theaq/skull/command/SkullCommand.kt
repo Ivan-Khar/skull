@@ -13,7 +13,7 @@ import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.Permission
 import net.minecraft.server.permissions.Permissions
-import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.LivingEntity
 import one.theaq.skull.logic.SkullManager
 import java.util.Optional
 
@@ -50,7 +50,7 @@ class SkullCommand: BaseCommand() {
         val targetSelector = getOptionalOfType(context, "target", EntitySelector::class.java)
         val target =
             if (targetSelector.isEmpty) Optional.empty()
-            else Optional.of(targetSelector.get().findSinglePlayer(context.source) as Player)
+            else Optional.of(targetSelector.get().findSinglePlayer(context.source) as LivingEntity)
         
         val skull = skullManager.createSkull(context.source.level, position, target)
         val uuid = skull.uuid.toString()
