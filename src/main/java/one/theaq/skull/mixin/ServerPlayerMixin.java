@@ -3,12 +3,11 @@ package one.theaq.skull.mixin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.TeleportTransition;
 import one.theaq.skull.config.Configs;
+import one.theaq.skull.logic.Skull;
 import one.theaq.skull.logic.SkullManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,8 +39,7 @@ public class ServerPlayerMixin {
         var newLevel = transition.newLevel();
         if (oldLevel.dimension() == newLevel.dimension()) return;
 
-        var titlePacket = new ClientboundSetActionBarTextPacket(Component.translatable("skull.blocked.dimensiontp").withColor(TextColor.GRAY));
-        player.connection.send(titlePacket);
-        cir.cancel();
+        Skull.Companion.sendSubTitle(player, "skull.blocked.dimensiontp");
+        cir.setReturnValue(player);
     }
 }

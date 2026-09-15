@@ -121,10 +121,10 @@ class Skull(
         }
 
         when {
-            !server.playerList.players.contains(targetOptional.get())   -> getNewTarget(SwitchTargetReason.LEFT_SERVER)
-            !level.getPlayers { true }.contains(targetOptional.get())   -> getNewTarget(SwitchTargetReason.DIFFERENT_DIMENSION)
-            targetOptional.get().isDeadOrDying                          -> getNewTarget(SwitchTargetReason.DIED)
-            targetOptional.get().isSpectator                            -> getNewTarget(SwitchTargetReason.SPECTATOR)
+            !server.playerList.players.contains(targetOptional.get())       -> getNewTarget(SwitchTargetReason.LEFT_SERVER)
+            level.dimension() != targetOptional.get().level().dimension()   -> getNewTarget(SwitchTargetReason.DIFFERENT_DIMENSION)
+            targetOptional.get().isDeadOrDying                              -> getNewTarget(SwitchTargetReason.DIED)
+            targetOptional.get().isSpectator                                -> getNewTarget(SwitchTargetReason.SPECTATOR)
         }
     }
 
@@ -136,14 +136,8 @@ class Skull(
         if (playerTargets.isEmpty()) { clearTarget(); return }
 
         val newTarget: ServerPlayer = playerTargets.random()
-        if (config.targeting.notify) notifyTarget(newTarget)
+        if (config.targeting.notify) sendSubTitle(newTarget, "skull.targeting.notification")
         setTarget(newTarget)
-    }
-
-    fun notifyTarget(player: ServerPlayer) {
-        val titlePacket = ClientboundSetActionBarTextPacket(Component.translatable("skull.targeting.notification").withColor(TextColor.GRAY))
-
-        player.connection.send(titlePacket)
     }
 
     fun onCollision(collider: LivingEntity) {
@@ -171,7 +165,10 @@ class Skull(
     }
 
     fun clearTarget() {
-        if (targetOptional.isPresent) manager.removeFromTargeted(targetOptional.get())
+        if (targetOptional.isPresent) {
+            sendSubTitle(targetOptional.get(), "skull.targeting.notification")
+            manager.removeFromTargeted(targetOptional.get())
+        }
         targetOptional = Optional.empty()
     }
 
@@ -194,5 +191,14 @@ class Skull(
         DIFFERENT_DIMENSION,
         SPECTATOR,
         COMMAND_SWITCHED
+    }
+
+    companion object {
+        fun sendSubTitle(entity: LivingEntity, translation: String) {
+            if (entity !is ServerPlayer) return
+
+            val subtitlePacket = ClientboundSetActionBarTextPacket(Component.translatable(translation).withColor(TextColor.GRAY))
+            entity.connection.send(subtitlePacket)
+        }
     }
 }
