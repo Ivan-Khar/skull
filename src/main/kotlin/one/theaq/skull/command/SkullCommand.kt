@@ -54,9 +54,9 @@ class SkullCommand: BaseCommand() {
         
         val skull = skullManager.createSkull(context.source.level, position, target)
         val uuid = skull.uuid.toString()
-        val targetName = if (target.isPresent) Component.translatable("skull.command.spawn.target.player", target.get().displayName.string) else ""
+        val targetName = if (target.isPresent) Component.translatable("skull.command.spawn.target.player", target.get().displayName.string) else Component.empty()
 
-        context.source.sendSystemMessage(Component.translatable("skull.command.spawn", uuid, skull.pos.toString(), targetName.toString()))
+        context.source.sendSystemMessage(Component.translatable("skull.command.spawn", uuid, skull.pos.toString(), targetName))
         return 0
     }
 

@@ -166,7 +166,7 @@ class Skull(
 
     fun clearTarget() {
         if (targetOptional.isPresent) {
-            sendSubTitle(targetOptional.get(), "skull.target.cleared")
+            sendSubTitle(targetOptional.get(), "skull.targeting.cleared")
             manager.removeFromTargeted(targetOptional.get())
         }
         targetOptional = Optional.empty()
