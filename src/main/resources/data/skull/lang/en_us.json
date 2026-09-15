@@ -5,7 +5,11 @@
   "skull.command.list.value": "\n%s at %s, %s",
   "skull.command.list.target.player": "targeting %s",
   "skull.command.list.target.searching": "searching for target",
-  "skull.command.delete": "Deleted %s skull",
+  "skull.command.delete.single": "Deleted %s skull",
+  "skull.command.delete.multiple": "Deleted %s skulls",
   "skull.command.deleteall": "Deleted all skulls",
-  "skull.kill": "%s was fucking killed idk lmfao theres gonna be different message"
+  "skull.targeting.notification": "You feel something watching you",
+  "skull.blocked.gamemode": "Some weird force is blocking you from doing that",
+  "skull.blocked.dimensiontp": "Something is pushing you away from that dimension",
+  "skull.kill": "%s is gone"
 }
