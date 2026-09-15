@@ -21,7 +21,7 @@ public class ServerPlayerMixin {
         if (!Configs.INSTANCE.getCOMMON().getSkull().getBlocksSpectatorSwitch()) return;
 
         var player = ((ServerPlayer) (Object) this);
-        if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player.getUUID()) || mode != GameType.SPECTATOR) return;
+        if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player) || mode != GameType.SPECTATOR) return;
 
         var titlePacket = new ClientboundSetActionBarTextPacket(Component.translatable("skull.blocked.gamemode").withColor(TextColor.GRAY));
         player.connection.send(titlePacket);
@@ -33,7 +33,7 @@ public class ServerPlayerMixin {
         if (!Configs.INSTANCE.getCOMMON().getSkull().getBlocksDimensionSwitch()) return;
 
         var player = ((ServerPlayer) (Object) this);
-        if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player.getUUID())) return;
+        if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player)) return;
 
         var oldLevel = player.level();
         var newLevel = transition.newLevel();
