@@ -180,6 +180,7 @@ class Skull(
      *  removes skulls from holderAttachments
      */
     fun destroy() {
+        clearTarget()
         level.players().filter { it.eyePosition.distanceTo(pos) < 128 }.forEach { player ->
             level.sendParticles(player, ParticleTypes.ASH, false, false, this.pos.x, this.pos.y, this.pos.z, 50, 0.125, 0.125, 0.125, 0.025)
         }

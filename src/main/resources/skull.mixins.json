@@ -5,7 +5,8 @@
     "mixins": [
         "CombatTrackerMixin",
         "LivingEntityAccessor",
-        "MinecraftServerMixin"
+        "MinecraftServerMixin",
+        "ServerPlayerMixin"
     ],
     "injectors": {
         "defaultRequire": 1

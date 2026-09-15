@@ -69,6 +69,10 @@ class SkullManager {
         entityTargeted.add(entity)
     }
 
+    fun isTargetedBySkull(entity: LivingEntity): Boolean {
+        return entityTargeted.contains(entity)
+    }
+
     fun removeFromTargeted(entity: LivingEntity): Boolean {
         return entityTargeted.remove(entity)
     }
