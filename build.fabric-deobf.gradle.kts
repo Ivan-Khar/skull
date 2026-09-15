@@ -121,10 +121,6 @@ loom {
 fletchingTable {
     fabric {
         entrypointMappings.put("fabric-datagen", "net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint")
-        entrypointMappings.put(
-            "fabric-client-gametest",
-            "net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest"
-        )
     }
 
     mixins.register("main") {

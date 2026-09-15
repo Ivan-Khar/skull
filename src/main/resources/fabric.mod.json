@@ -22,12 +22,6 @@
                 "value": "one.theaq.skull.platform.fabric.FabricEntrypoint"
             }
         ],
-        "client": [
-            {
-                "adapter": "kotlin",
-                "value": "one.theaq.skull.client.platform.fabric.FabricClientEntrypoint"
-            }
-        ],
         "fabric-datagen": [
             {
                 "adapter": "kotlin",
