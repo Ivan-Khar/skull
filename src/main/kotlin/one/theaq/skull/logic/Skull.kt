@@ -4,6 +4,7 @@ import eu.pb4.polymer.virtualentity.api.ElementHolder
 import eu.pb4.polymer.virtualentity.api.attachment.HolderAttachment
 import eu.pb4.polymer.virtualentity.api.attachment.ManualAttachment
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextColor
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket
@@ -168,6 +169,9 @@ class Skull(
      *  removes skulls from holderAttachments
      */
     fun destroy() {
+        level.players().filter { it.eyePosition.distanceTo(pos) < 128 }.forEach { player ->
+            level.sendParticles(player, ParticleTypes.ASH, false, false, this.pos.x, this.pos.y, this.pos.z, 50, 0.125, 0.125, 0.125, 0.025)
+        }
         holderAttachment.destroy()
     }
 
