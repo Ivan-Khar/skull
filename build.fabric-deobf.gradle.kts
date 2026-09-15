@@ -55,7 +55,6 @@ dependencies {
     implementation("me.fzzyhmstrs:fzzy_config:${deps("fzzy_config")}")
 
     implementation("maven.modrinth:sodium:${deps("sodium")}")
-    implementation("maven.modrinth:carpet:${deps("carpet")}")
 }
 
 java {
