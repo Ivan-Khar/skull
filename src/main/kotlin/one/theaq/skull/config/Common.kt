@@ -25,8 +25,11 @@ class Common: Config(
         var timeoutOnNoTargets      = 100
         var disappearOnKill         = false
         var playerGracePeriod       = 200
+
+        var blockingGroup = ConfigGroup("blocking")
         var blocksSpectatorSwitch   = false
         var blocksDimensionSwitch   = false
+        @ConfigGroup.Pop
 
         var speedGroup = ConfigGroup("skull_speed")
         var baseSpeed       = 0.05
