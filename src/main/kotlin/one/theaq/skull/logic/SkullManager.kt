@@ -55,12 +55,12 @@ class SkullManager {
         }
     }
 
-    fun addToKilledBySkull(player: LivingEntity) {
-        killedBySkull.add(player)
+    fun addToKilledBySkull(entity: LivingEntity) {
+        killedBySkull.add(entity)
     }
 
-    fun removeFromKilledBySkull(player: LivingEntity): Boolean {
-        return killedBySkull.remove(player)
+    fun removeFromKilledBySkull(entity: LivingEntity): Boolean {
+        return killedBySkull.remove(entity)
     }
 
     companion object {
