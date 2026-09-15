@@ -19,7 +19,7 @@ abstract class BaseCommand {
         )
 
         val main = dispatcher.register(mainBuilder)
-        val alias = dispatcher.register(Commands.literal(getName()).redirect(main))
+        val alias = dispatcher.register(Commands.literal(getName()).requires(::permissionCheck).redirect(main))
     }
 
     open fun <T: ArgumentBuilder<CommandSourceStack, T>> commandBuilder(command: T): T {
