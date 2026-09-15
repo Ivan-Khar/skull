@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.Permission
 import net.minecraft.server.permissions.Permissions
 import net.minecraft.world.entity.player.Player
-import one.theaq.skull.Main
 import one.theaq.skull.logic.SkullManager
 import java.util.Optional
 
@@ -90,7 +89,7 @@ class SkullCommand: BaseCommand() {
             skullManager.removeSkull(it) >= 0
         }
 
-        context.source.sendSystemMessage(Component.translatable("skull.command.delete", removedSkulls))
+        context.source.sendSystemMessage(Component.translatable("skull.command.delete.${ if (removedSkulls > 1) "multiple" else "single" }", removedSkulls))
         return removedSkulls
     }
 
