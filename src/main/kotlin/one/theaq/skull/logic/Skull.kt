@@ -41,7 +41,7 @@ class Skull(
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
-        if (targetOptional.isPresent) manager.addToTargeted(targetOptional.get())
+        if (targetOptional.isPresent) manager.addToTargeted(targetOptional.get().uuid)
 
         displayElement.interpolationDuration = 2
         displayElement.teleportDuration = 5
@@ -153,21 +153,21 @@ class Skull(
         if (config.skull.disappearOnKill) manager.removeSkull(this)
 
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
-        manager.addToKilledBySkull(target)
+        manager.addToKilledBySkull(target.uuid)
         target.kill(level)
 
         clearTarget()
     }
 
     fun setTarget(entity: LivingEntity) {
-        manager.addToTargeted(entity)
+        manager.addToTargeted(entity.uuid)
         targetOptional = Optional.of(entity)
     }
 
     fun clearTarget() {
         if (targetOptional.isPresent) {
             sendSubTitle(targetOptional.get(), "skull.targeting.notification")
-            manager.removeFromTargeted(targetOptional.get())
+            manager.removeFromTargeted(targetOptional.get().uuid)
         }
         targetOptional = Optional.empty()
     }

@@ -2,17 +2,15 @@ package one.theaq.skull.logic
 
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
 class SkullManager {
     private val skulls: MutableList<Skull> = mutableListOf()
     private val markedForRemoval: MutableList<Skull> = mutableListOf()
-    private val killedBySkull: MutableList<LivingEntity> = mutableListOf()
-    private val entityTargeted: MutableList<LivingEntity> = mutableListOf()
+    private val killedBySkull: MutableList<UUID> = mutableListOf()
+    private val entityTargeted: MutableList<UUID> = mutableListOf()
 
     fun createSkull(level: ServerLevel): Skull {
         return this.createSkull(level)
@@ -57,24 +55,24 @@ class SkullManager {
         }
     }
 
-    fun addToKilledBySkull(entity: LivingEntity) {
-        killedBySkull.add(entity)
+    fun addToKilledBySkull(uuid: UUID) {
+        killedBySkull.add(uuid)
     }
 
-    fun removeFromKilledBySkull(entity: LivingEntity): Boolean {
-        return killedBySkull.remove(entity)
+    fun removeFromKilledBySkull(uuid: UUID): Boolean {
+        return killedBySkull.remove(uuid)
     }
 
-    fun addToTargeted(entity: LivingEntity) {
-        entityTargeted.add(entity)
+    fun addToTargeted(uuid: UUID) {
+        entityTargeted.add(uuid)
     }
 
-    fun isTargetedBySkull(entity: LivingEntity): Boolean {
-        return entityTargeted.contains(entity)
+    fun isTargetedBySkull(uuid: UUID): Boolean {
+        return entityTargeted.contains(uuid)
     }
 
-    fun removeFromTargeted(entity: LivingEntity): Boolean {
-        return entityTargeted.remove(entity)
+    fun removeFromTargeted(uuid: UUID): Boolean {
+        return entityTargeted.remove(uuid)
     }
 
     companion object {

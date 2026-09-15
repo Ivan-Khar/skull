@@ -20,7 +20,7 @@ public class CombatTrackerMixin {
 	
 	@Inject(method = "getDeathMessage", at = @At("HEAD"), cancellable = true)
 	private void customSkullDeathMessage(CallbackInfoReturnable<Component> cir) {
-		if (!SkullManager.Companion.getINSTANCE().removeFromKilledBySkull(mob)) return;
+		if (!SkullManager.Companion.getINSTANCE().removeFromKilledBySkull(mob.getUUID())) return;
 
 		var messagesConfig = Configs.INSTANCE.getCOMMON().getMessages();
 		var randomKillMessage = messagesConfig.getRandomKillMessage();
