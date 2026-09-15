@@ -1,6 +1,7 @@
 package one.theaq.skull.mixin;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.entity.LivingEntity;
 import one.theaq.skull.logic.SkullManager;
@@ -19,7 +20,7 @@ public class CombatTrackerMixin {
 	
 	@Inject(method = "getDeathMessage", at = @At("HEAD"), cancellable = true)
 	private void customSkullDeathMessage(CallbackInfoReturnable<Component> cir) {
-		if (!SkullManager.Companion.getINSTANCE().removeFromKilledPlayers(mob.getUUID())) return;
+		if (!SkullManager.Companion.getINSTANCE().removeFromKilledBySkull(mob)) return;
 		
 		cir.setReturnValue(Component.translatable("skull.kill", mob.getDisplayName()));
 	}

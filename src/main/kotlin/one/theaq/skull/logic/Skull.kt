@@ -158,7 +158,7 @@ class Skull(
         if (config.skull.disappearOnKill) manager.removeSkull(this)
 
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
-        manager.addToKilledPlayers(target.uuid)
+        manager.addToKilledBySkull(target)
         target.kill(level)
 
         targetOptional = Optional.empty()

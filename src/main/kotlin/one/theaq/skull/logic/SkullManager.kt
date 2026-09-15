@@ -2,16 +2,16 @@ package one.theaq.skull.logic
 
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
 class SkullManager {
-
     private val skulls: MutableList<Skull> = mutableListOf()
     private val markedForRemoval: MutableList<Skull> = mutableListOf()
-    private val playersKilled: MutableList<UUID> = mutableListOf()
-
+    private val killedBySkull: MutableList<LivingEntity> = mutableListOf()
     fun createSkull(level: ServerLevel): Skull {
         return this.createSkull(level)
     }
@@ -55,12 +55,12 @@ class SkullManager {
         }
     }
 
-    fun addToKilledPlayers(uuid: UUID) {
-        playersKilled.add(uuid)
+    fun addToKilledBySkull(player: LivingEntity) {
+        killedBySkull.add(player)
     }
 
-    fun removeFromKilledPlayers(uuid: UUID): Boolean {
-        return playersKilled.remove(uuid)
+    fun removeFromKilledBySkull(player: LivingEntity): Boolean {
+        return killedBySkull.remove(player)
     }
 
     companion object {
