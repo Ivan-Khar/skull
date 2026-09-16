@@ -3,9 +3,13 @@ package one.theaq.skull.mixin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.portal.TeleportTransition;
+import one.theaq.skull.Main;
 import one.theaq.skull.config.Configs;
 import one.theaq.skull.logic.Skull;
 import one.theaq.skull.logic.SkullManager;
@@ -41,5 +45,19 @@ public class ServerPlayerMixin {
 
         Skull.Companion.sendSubTitle(player, "skull.blocked.dimensiontp");
         cir.setReturnValue(player);
+    }
+
+    @Inject(method = "hurtServer", at = @At("HEAD"))
+    private void blockSuicide(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        if (!Configs.INSTANCE.getCOMMON().getSkull().getBlocksSuicides()) return;
+
+        var player = ((ServerPlayer) (Object) this);
+        if (source.is(DamageTypes.GENERIC_KILL)) return;
+        if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player)) return;
+
+        if (!source.isDirect()) return;
+
+
+        cir.setReturnValue(false);
     }
 }

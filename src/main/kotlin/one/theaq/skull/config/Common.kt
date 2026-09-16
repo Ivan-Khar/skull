@@ -44,6 +44,7 @@ class Common: Config(
 
         var blockingGroup = ConfigGroup("blocking")
         var blocksSpectatorSwitch       = true
+        var blocksSuicides              = false
         @ConfigGroup.Pop
         var blocksDimensionSwitch       = true
 
