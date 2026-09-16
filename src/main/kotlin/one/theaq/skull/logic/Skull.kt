@@ -169,7 +169,7 @@ class Skull(
     }
 
     fun clearTarget() {
-        if (!config.skull.keepTarget) return
+        if (config.skull.keepTarget) return
 
         if (targetOptional.isPresent) {
             sendSubTitle(targetOptional.get(), "skull.targeting.cleared")
