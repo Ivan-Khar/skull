@@ -19,7 +19,7 @@ import one.theaq.skull.logic.SkullManager
 import java.util.Optional
 
 class SkullCommand: BaseCommand() {
-    val skullManager = SkullManager.INSTANCE;
+    val skullManager = SkullManager.INSTANCE
     val config = Configs.COMMON
     override fun getName(): String {
         return "skull"
@@ -57,7 +57,7 @@ class SkullCommand: BaseCommand() {
         val uuid = skull.uuid.toString()
         val targetName = if (target.isPresent) Component.translatable("skull.command.spawn.target.player", target.get().displayName.string) else Component.empty()
 
-        context.source.sendSystemMessage(Component.translatable("skull.command.spawn", uuid, skull.pos.toString(), targetName))
+        context.source.sendSystemMessage(Component.translatable("skull.command.spawn", uuid, skull.pos.toString(), skull.level.dimensionTypeRegistration().registeredName, targetName))
         return 0
     }
 
@@ -66,17 +66,18 @@ class SkullCommand: BaseCommand() {
         val textResponse = Component.translatable("skull.command.list.header")
         val expanded = getOrDefault(context, "expand", false)
 
-        skulls.forEach {
-            val uuid = it.uuid.toString()
+        skulls.forEach { skull ->
+            val uuid = skull.uuid.toString()
             val uuidShort = uuid.substring(0..7)
             val updateTimeout = config.skull.timeoutOnNoTargets
 
             textResponse.append(
                 Component.translatable("skull.command.list.value",
                     if (expanded) uuid else uuidShort,
-                    String.format("%.2f %.2f %.2f", it.pos.x, it.pos.y, it.pos.z),
-                    if (it.targetOptional.isPresent) Component.translatable("skull.command.list.target.player", it.targetOptional.get().displayName.string)
-                    else if (it.server.tickCount - it.lastTargetUpdate < updateTimeout) Component.translatable("skull.command.list.target.idling")
+                    String.format("%.2f %.2f %.2f", skull.pos.x, skull.pos.y, skull.pos.z),
+                    skull.level.dimensionTypeRegistration().registeredName,
+                    if (skull.targetOptional.isPresent) Component.translatable("skull.command.list.target.player", skull.targetOptional.get().displayName.string)
+                    else if (skull.server.tickCount - skull.lastTargetUpdate < updateTimeout) Component.translatable("skull.command.list.target.idling")
                     else Component.translatable("skull.command.list.target.searching")
                 )
             )

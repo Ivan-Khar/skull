@@ -1,8 +1,8 @@
 {
-  "skull.command.spawn": "Spawned skull %s at %s %s",
+  "skull.command.spawn": "Spawned skull %s at %s in %s %s",
   "skull.command.spawn.target.player": "targeting %s",
   "skull.command.list.header": "Skull list:",
-  "skull.command.list.value": "\n%s at %s, %s",
+  "skull.command.list.value": "\n%s at %s in %s, %s",
   "skull.command.list.target.player": "targeting %s",
   "skull.command.list.target.searching": "searching for target",
   "skull.command.list.target.idling": "idling",
