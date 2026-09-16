@@ -5,6 +5,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes
 import net.minecraft.world.phys.Vec3
 import one.theaq.skull.config.Configs
 import java.util.*
@@ -65,7 +66,7 @@ class SkullManager {
         val server = player.level().server
         if (server.playerCount < config.spawn.playerCountRequirement) return
 
-        val spawnDimensionRegistry = server.registryAccess().get(config.spawn.spawnDimension)
+        val spawnDimensionRegistry = server.registryAccess().get(BuiltinDimensionTypes.OVERWORLD) //TODO: fix config
         if (spawnDimensionRegistry.isEmpty) return
 
         val spawnDimension = server.allLevels.find { level -> level.dimensionType() == spawnDimensionRegistry.get().value() }
