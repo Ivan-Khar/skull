@@ -29,6 +29,7 @@ class Common: Config(
 
         var killMessageGroup = ConfigGroup("kill_message")
         var randomKillMessage           = true
+        @ConfigGroup.Pop
         var amountOfKillMessages        = 10
     }
 
@@ -43,13 +44,14 @@ class Common: Config(
 
         var blockingGroup = ConfigGroup("blocking")
         var blocksSpectatorSwitch       = true
-        var blocksDimensionSwitch       = true
         @ConfigGroup.Pop
+        var blocksDimensionSwitch       = true
 
         var speedGroup = ConfigGroup("skull_speed")
         var baseSpeed       = 0.05
         var fastSpeed       = 0.25
         var fasterSpeed     = 10.0
+        @ConfigGroup.Pop
         var fastestSpeed    = 100.0
     }
 
