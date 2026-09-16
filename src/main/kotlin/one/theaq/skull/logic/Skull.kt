@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
 import one.theaq.skull.config.Configs
+import one.theaq.skull.util.SkullMath
 import org.joml.Quaternionf
 import java.util.Optional
 import java.util.UUID
@@ -70,8 +71,8 @@ class Skull(
         val targetDistance = targetDelta.length()
 
         val speed = when {
-            targetDistance in 16.0..64.0 -> config.skull.fastSpeed
-            targetDistance in 64.0..512.0 -> config.skull.fasterSpeed
+            targetDistance in 16.0..64.0 -> SkullMath.map(targetDistance, 16.0, 64.0, config.skull.baseSpeed, config.skull.fastSpeed)
+            targetDistance in 64.0..512.0 -> SkullMath.map(targetDistance, 64.0, 512.0, config.skull.fastSpeed, config.skull.fasterSpeed)
             targetDistance > 512.0 -> config.skull.fastestSpeed
             else -> config.skull.baseSpeed
         }
