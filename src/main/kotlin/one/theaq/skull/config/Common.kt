@@ -14,6 +14,13 @@ class Common: Config(
     name = "${Main.MOD_ID}-common"
 ) {
 
+    var spawn = SpawnSection()
+    class SpawnSection: ConfigSection() {
+        var spawnWhenEnoughPlayers = true
+        var playerCountRequirement = 2
+        var spawnDimensions = listOf(BuiltinDimensionTypes.OVERWORLD)
+    }
+
     var messages = MessagesSection()
     class MessagesSection: ConfigSection() {
         var notifyOnTarget = true
@@ -31,15 +38,15 @@ class Common: Config(
         var playerGracePeriod       = 200
 
         var blockingGroup = ConfigGroup("blocking")
-        var blocksSpectatorSwitch   = false
-        var blocksDimensionSwitch   = false
+        var blocksSpectatorSwitch   = true
+        var blocksDimensionSwitch   = true
         @ConfigGroup.Pop
 
         var speedGroup = ConfigGroup("skull_speed")
         var baseSpeed       = 0.05
-        var fastSpeed       = 0.5
-        var fasterSpeed     = 20.0
-        var fastestSpeed    = 500.0
+        var fastSpeed       = 0.25
+        var fasterSpeed     = 10.0
+        var fastestSpeed    = 100.0
     }
 
     override fun defaultPermLevel(): Int {
