@@ -14,12 +14,13 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.Permission
 import net.minecraft.server.permissions.Permissions
 import net.minecraft.world.entity.LivingEntity
+import one.theaq.skull.config.Configs
 import one.theaq.skull.logic.SkullManager
 import java.util.Optional
 
 class SkullCommand: BaseCommand() {
     val skullManager = SkullManager.INSTANCE;
-
+    val config = Configs.COMMON
     override fun getName(): String {
         return "skull"
     }
@@ -68,7 +69,7 @@ class SkullCommand: BaseCommand() {
         skulls.forEach {
             val uuid = it.uuid.toString()
             val uuidShort = uuid.substring(0..7)
-            val updateTimeout = it.config.skull.timeoutOnNoTargets
+            val updateTimeout = config.skull.timeoutOnNoTargets
 
             textResponse.append(
                 Component.translatable("skull.command.list.value",

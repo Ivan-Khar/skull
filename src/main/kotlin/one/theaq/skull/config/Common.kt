@@ -20,7 +20,7 @@ class Common: Config(
         var spawnWhenEnoughPlayers      = true
         var playerCountRequirement      = 2
         var skullCount                  = 1
-        var spawnDimensions             = listOf(BuiltinDimensionTypes.OVERWORLD)
+        var spawnDimension              = BuiltinDimensionTypes.OVERWORLD
     }
 
     var messages = MessagesSection()

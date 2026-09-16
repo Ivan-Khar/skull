@@ -1,9 +1,12 @@
 package one.theaq.skull.logic
 
+import net.minecraft.core.BlockPos
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
+import one.theaq.skull.config.Configs
 import java.util.*
 
 class SkullManager {
@@ -11,9 +14,10 @@ class SkullManager {
     private val markedForRemoval: MutableList<Skull> = mutableListOf()
     private val killedBySkull: MutableList<LivingEntity> = mutableListOf()
     private val entityTargeted: MutableList<LivingEntity> = mutableListOf()
+    private val config = Configs.COMMON
 
-    fun createSkull(level: ServerLevel): Skull {
-        return this.createSkull(level)
+    fun createSkull(level: ServerLevel, pos: BlockPos, target: Optional<LivingEntity> = Optional.empty()): Skull  {
+        return createSkull(level, Vec3(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()), target)
     }
 
     fun createSkull(level: ServerLevel, pos: Vec3 = Vec3(0.0, 0.0, 0.0), target: Optional<LivingEntity> = Optional.empty()): Skull  {
@@ -52,6 +56,23 @@ class SkullManager {
 
         skulls.forEach {
             it.tick()
+        }
+    }
+
+    fun onPlayerJoin(player: ServerPlayer) {
+        val server = player.level().server
+
+        if (server.playerCount < config.spawn.playerCountRequirement) return
+        if (skulls.count() >= config.spawn.skullCount) return
+        val spawnDimensionRegistry = server.registryAccess().get(config.spawn.spawnDimension)
+        if (spawnDimensionRegistry.isEmpty) return
+
+        val spawnDimension = server.allLevels.find { it.dimensionType() == spawnDimensionRegistry.get().value() }
+        if (spawnDimension == null) return
+
+        val skullsToSpawn = config.spawn.skullCount - skulls.count()
+        for (skull in 1..skullsToSpawn) {
+            createSkull(spawnDimension, spawnDimension.respawnData.pos())
         }
     }
 

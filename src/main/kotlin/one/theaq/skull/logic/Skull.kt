@@ -30,8 +30,8 @@ class Skull(
     var targetOptional: Optional<LivingEntity> = Optional.empty()
 ) {
     val server: MinecraftServer = level.server
-    val config = Configs.COMMON
-    var uuid: UUID = UUID.randomUUID()
+    private val config = Configs.COMMON
+    val uuid: UUID = UUID.randomUUID()
 
     var oldPos: Vec3 = pos
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
