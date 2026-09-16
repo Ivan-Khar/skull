@@ -42,7 +42,7 @@ class Skull(
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
     init {
-        if (targetOptional.isPresent) manager.addToTargeted(targetOptional.get())
+        if (targetOptional.isPresent) setTarget(targetOptional.get()) //wack way to do this but eeeh its fine
 
         displayElement.interpolationDuration = 2
         displayElement.teleportDuration = 5
@@ -131,9 +131,10 @@ class Skull(
 
     fun getNewTarget(reason: SwitchTargetReason) {
         lastTargetUpdate = server.tickCount
+        if (targetOptional.isPresent && config.skull.keepTarget) return
 
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
-        playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive }
+        playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive || manager.isTargetedBySkull(it) }
         if (playerTargets.isEmpty()) { clearTarget(); return }
 
         val newTarget: ServerPlayer = playerTargets.random()
@@ -161,11 +162,15 @@ class Skull(
     }
 
     fun setTarget(entity: LivingEntity) {
+        if (targetOptional.isPresent) clearTarget()
+
         manager.addToTargeted(entity)
         targetOptional = Optional.of(entity)
     }
 
     fun clearTarget() {
+        if (!config.skull.keepTarget) return
+
         if (targetOptional.isPresent) {
             sendSubTitle(targetOptional.get(), "skull.targeting.cleared")
             manager.removeFromTargeted(targetOptional.get())
@@ -197,6 +202,7 @@ class Skull(
     companion object {
         fun sendSubTitle(entity: LivingEntity, translation: String) {
             if (entity !is ServerPlayer) return
+            if (!entity.connection.isAcceptingMessages) return
 
             val subtitlePacket = ClientboundSetActionBarTextPacket(Component.translatable(translation).withColor(TextColor.GRAY))
             entity.connection.send(subtitlePacket)

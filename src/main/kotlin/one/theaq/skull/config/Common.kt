@@ -34,8 +34,10 @@ class Common: Config(
     class SkullSection: ConfigSection() {
         var block                   = Blocks.SKELETON_SKULL
         var timeoutOnNoTargets      = 100
+        var keepTarget              = false
         var disappearOnKill         = false
         var playerGracePeriod       = 200
+
 
         var blockingGroup = ConfigGroup("blocking")
         var blocksSpectatorSwitch   = true
