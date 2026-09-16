@@ -76,7 +76,7 @@ class SkullManager {
         if (skullsInDimension.count() >= config.spawn.skullCount) return
 
         val skullsToSpawn = config.spawn.skullCount - skulls.count()
-        for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos())
+        for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos().above(10))
     }
 
     fun addToKilledBySkull(entity: LivingEntity) {
