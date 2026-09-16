@@ -60,20 +60,22 @@ class SkullManager {
     }
 
     fun onPlayerJoin(player: ServerPlayer) {
-        val server = player.level().server
+        if (!config.spawn.spawnWhenEnoughPlayers) return
 
+        val server = player.level().server
         if (server.playerCount < config.spawn.playerCountRequirement) return
-        if (skulls.count() >= config.spawn.skullCount) return
+
         val spawnDimensionRegistry = server.registryAccess().get(config.spawn.spawnDimension)
         if (spawnDimensionRegistry.isEmpty) return
 
-        val spawnDimension = server.allLevels.find { it.dimensionType() == spawnDimensionRegistry.get().value() }
+        val spawnDimension = server.allLevels.find { level -> level.dimensionType() == spawnDimensionRegistry.get().value() }
         if (spawnDimension == null) return
 
+        val skullsInDimension = skulls.filter { skull -> skull.level.dimension() == spawnDimension }
+        if (skullsInDimension.count() >= config.spawn.skullCount) return
+
         val skullsToSpawn = config.spawn.skullCount - skulls.count()
-        for (skull in 1..skullsToSpawn) {
-            createSkull(spawnDimension, spawnDimension.respawnData.pos())
-        }
+        for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos())
     }
 
     fun addToKilledBySkull(entity: LivingEntity) {
