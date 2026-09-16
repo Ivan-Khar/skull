@@ -79,6 +79,13 @@ class SkullManager {
         for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos().above(10))
     }
 
+    fun clear() {
+        skulls.clear()
+        markedForRemoval.clear()
+        killedBySkull.clear()
+        entityTargeted.clear()
+    }
+
     fun addToKilledBySkull(entity: LivingEntity) {
         killedBySkull.add(entity)
     }
