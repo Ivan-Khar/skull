@@ -13,6 +13,7 @@
   "skull.targeting.cleared": "You were freed from the curse",
   "skull.blocked.gamemode": "Some weird force is already spectating you",
   "skull.blocked.dimensiontp": "Something is blocking you from changing dimensions",
+  "skull.blocked.suicide": "You cant die like that",
   "skull.kill.0": "%s is gone",
   "skull.kill.1": "%s is gone1",
   "skull.kill.2": "%s is gone2",

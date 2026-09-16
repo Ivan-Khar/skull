@@ -6,7 +6,7 @@ import me.fzzyhmstrs.fzzy_config.config.Config
 import me.fzzyhmstrs.fzzy_config.config.ConfigGroup
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes
+//import net.minecraft.world.level.dimension.BuiltinDimensionTypes
 import one.theaq.skull.Main
 
 class Common: Config(
@@ -28,7 +28,7 @@ class Common: Config(
         var notifyOnTarget              = true
 
         var killMessageGroup = ConfigGroup("kill_message")
-        var randomKillMessage           = true
+        var randomKillMessage           = false
         @ConfigGroup.Pop
         var amountOfKillMessages        = 10
     }

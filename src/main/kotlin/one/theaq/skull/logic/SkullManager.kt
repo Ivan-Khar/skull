@@ -66,7 +66,7 @@ class SkullManager {
         val server = player.level().server
         if (server.playerCount < config.spawn.playerCountRequirement) return
 
-        val spawnDimensionRegistry = server.registryAccess().get(BuiltinDimensionTypes.NETHER) //TODO: fix config
+        val spawnDimensionRegistry = server.registryAccess().get(BuiltinDimensionTypes.OVERWORLD) //TODO: fix config
         if (spawnDimensionRegistry.isEmpty) return
 
         val spawnDimension = server.allLevels.find { level -> level.dimensionType() == spawnDimensionRegistry.get().value() }

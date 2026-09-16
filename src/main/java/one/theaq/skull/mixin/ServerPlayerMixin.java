@@ -9,7 +9,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.portal.TeleportTransition;
-import one.theaq.skull.Main;
 import one.theaq.skull.config.Configs;
 import one.theaq.skull.logic.Skull;
 import one.theaq.skull.logic.SkullManager;
@@ -47,7 +46,7 @@ public class ServerPlayerMixin {
         cir.setReturnValue(player);
     }
 
-    @Inject(method = "hurtServer", at = @At("HEAD"))
+    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     private void blockSuicide(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         if (!Configs.INSTANCE.getCOMMON().getSkull().getBlocksSuicides()) return;
 
@@ -55,9 +54,11 @@ public class ServerPlayerMixin {
         if (source.is(DamageTypes.GENERIC_KILL)) return;
         if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player)) return;
 
-        if (!source.isDirect()) return;
-
-
+        if (source.getEntity() != null || source.getDirectEntity() != null) return;
+        if (player.getHealth() - damage > 0) return;
+        else player.setHealth(1.0f);
+        
+        Skull.Companion.sendSubTitle(player, "skull.blocked.suicide");
         cir.setReturnValue(false);
     }
 }
