@@ -17,32 +17,33 @@ class Common: Config(
 
     var spawn = SpawnSection()
     class SpawnSection: ConfigSection() {
-        var spawnWhenEnoughPlayers = true
-        var playerCountRequirement = 2
-        var spawnDimensions = listOf(BuiltinDimensionTypes.OVERWORLD)
+        var spawnWhenEnoughPlayers      = true
+        var playerCountRequirement      = 2
+        var skullCount                  = 1
+        var spawnDimensions             = listOf(BuiltinDimensionTypes.OVERWORLD)
     }
 
     var messages = MessagesSection()
     class MessagesSection: ConfigSection() {
-        var notifyOnTarget = true
+        var notifyOnTarget              = true
 
         var killMessageGroup = ConfigGroup("kill_message")
-        var randomKillMessage = true
-        var amountOfKillMessages = 10
+        var randomKillMessage           = true
+        var amountOfKillMessages        = 10
     }
 
     var skull = SkullSection()
     class SkullSection: ConfigSection() {
-        var block                   = Blocks.SKELETON_SKULL
-        var timeoutOnNoTargets      = 100
-        var keepTarget              = false
-        var disappearOnKill         = false
-        var playerGracePeriod       = 200
-
+        var block                       = Blocks.SKELETON_SKULL
+        var timeoutOnNoTargets          = 100
+        var keepTarget                  = false
+        var disappearOnKill             = false
+        var playerGracePeriod           = 200
+        var crashGameOnKill             = false //need to figure out how to crash peoples game
 
         var blockingGroup = ConfigGroup("blocking")
-        var blocksSpectatorSwitch   = true
-        var blocksDimensionSwitch   = true
+        var blocksSpectatorSwitch       = true
+        var blocksDimensionSwitch       = true
         @ConfigGroup.Pop
 
         var speedGroup = ConfigGroup("skull_speed")
