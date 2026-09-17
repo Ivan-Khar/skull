@@ -1,11 +1,12 @@
 package one.theaq.skull.logic
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes
 import net.minecraft.world.phys.Vec3
 import one.theaq.skull.config.Configs
 import java.util.*
@@ -66,10 +67,17 @@ class SkullManager {
         val server = player.level().server
         if (server.playerCount < config.spawnSection.playerCountRequirement.get()) return
 
-        val spawnDimensionRegistry = server.registryAccess().get(BuiltinDimensionTypes.OVERWORLD) //TODO: fix config
+        val dimensionRegistryLookup = server.reloadableRegistries().lookup().lookup(Registries.DIMENSION)
+        if (dimensionRegistryLookup.isEmpty) return
+
+        val configdimension = Identifier.parse(config.spawnSection.spawnDimension)
+        val test = dimensionRegistryLookup.get().listElementIds().filter { key -> key.identifier() == configdimension }.findFirst()
+        if (test.isEmpty) return
+
+        val spawnDimensionRegistry = server.registryAccess().get(test.get())
         if (spawnDimensionRegistry.isEmpty) return
 
-        val spawnDimension = server.allLevels.find { level -> level.dimensionType() == spawnDimensionRegistry.get().value() }
+        val spawnDimension = server.allLevels.find { level -> spawnDimensionRegistry.get().`is`(level.dimension()) }
         if (spawnDimension == null) return
 
         val skullsInDimension = skulls.filter { skull -> skull.level.dimension() == spawnDimension }

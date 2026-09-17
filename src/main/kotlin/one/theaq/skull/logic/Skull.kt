@@ -37,7 +37,7 @@ class Skull(
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
     var lastTargetUpdate: Int = 0
 
-    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skullSection.block.asItem())
+    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skullSection.block.get().asItem())
     val elementHolder: ElementHolder = ElementHolder()
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
