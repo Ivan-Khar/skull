@@ -67,21 +67,13 @@ class SkullManager {
         val server = player.level().server
         if (server.playerCount < config.spawnSection.playerCountRequirement.get()) return
 
-        val dimensionRegistryLookup = server.reloadableRegistries().lookup().lookup(Registries.DIMENSION)
-        if (dimensionRegistryLookup.isEmpty) return
-
         val configDimension = Identifier.parse(config.spawnSection.spawnDimension)
-        val dimensionIdentifier = dimensionRegistryLookup.get().listElementIds().filter { key -> key.identifier() == configDimension }.findFirst()
-        if (dimensionIdentifier.isEmpty) return
 
-        val spawnDimensionRegistry = server.registryAccess().get(dimensionIdentifier.get())
-        if (spawnDimensionRegistry.isEmpty) return
-
-        val spawnDimension = server.allLevels.find { level -> spawnDimensionRegistry.get().`is`(level.dimension()) }
-        if (spawnDimension == null) return
-
-        val skullsInDimension = skulls.filter { skull -> skull.level.dimension() == spawnDimension }
+        val skullsInDimension = skulls.filter { skull -> skull.level.dimension().identifier() == configDimension }
         if (skullsInDimension.count() >= config.spawnSection.skullCount.get()) return
+
+        val spawnDimension = server.allLevels.find { level -> level.dimension().identifier() == configDimension }
+        if (spawnDimension == null) return
 
         val skullsToSpawn = config.spawnSection.skullCount.get() - skulls.count()
         for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos().above(10))
