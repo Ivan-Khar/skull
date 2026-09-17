@@ -44,6 +44,8 @@
   "skull.common.spawnSection.playerCountRequirement.desc": "Amount of people needed to spawn skulls",
   "skull.common.spawnSection.skullCount": "Skull count",
   "skull.common.spawnSection.skullCount.desc": "Amount of skulls to spawn",
+  "skull.common.spawnSection.spawnDimension": "Spawn dimension",
+  "skull.common.spawnSection.spawnDimension.desc": "Dimension in which skulls will spawn",
   "skull.common.spawnSection.spawnWhenEnoughPlayers": "Spawn on enough players",
   "skull.common.spawnSection.spawnWhenEnoughPlayers.desc": "Spawn skulls when enough players joined"
 }

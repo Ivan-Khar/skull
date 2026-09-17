@@ -40,6 +40,8 @@ class Common: Config(
         @Translatable.Desc("Amount of skulls to spawn")
         var skullCount = ValidatedInt(1, Int.MAX_VALUE, 1, ValidatedNumber.WidgetType.TEXTBOX_WITH_BUTTONS)
             .withIncrement(1)
+        @Translatable.Name("Spawn dimension")
+        @Translatable.Desc("Dimension in which skulls will spawn")
         var spawnDimension = "minecraft:overworld"
     }
 
