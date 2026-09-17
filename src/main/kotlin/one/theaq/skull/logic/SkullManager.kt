@@ -70,11 +70,11 @@ class SkullManager {
         val dimensionRegistryLookup = server.reloadableRegistries().lookup().lookup(Registries.DIMENSION)
         if (dimensionRegistryLookup.isEmpty) return
 
-        val configdimension = Identifier.parse(config.spawnSection.spawnDimension)
-        val test = dimensionRegistryLookup.get().listElementIds().filter { key -> key.identifier() == configdimension }.findFirst()
-        if (test.isEmpty) return
+        val configDimension = Identifier.parse(config.spawnSection.spawnDimension)
+        val dimensionIdentifier = dimensionRegistryLookup.get().listElementIds().filter { key -> key.identifier() == configDimension }.findFirst()
+        if (dimensionIdentifier.isEmpty) return
 
-        val spawnDimensionRegistry = server.registryAccess().get(test.get())
+        val spawnDimensionRegistry = server.registryAccess().get(dimensionIdentifier.get())
         if (spawnDimensionRegistry.isEmpty) return
 
         val spawnDimension = server.allLevels.find { level -> spawnDimensionRegistry.get().`is`(level.dimension()) }
