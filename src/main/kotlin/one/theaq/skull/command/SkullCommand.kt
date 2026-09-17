@@ -69,7 +69,6 @@ class SkullCommand: BaseCommand() {
         skulls.forEach { skull ->
             val uuid = skull.uuid.toString()
             val uuidShort = uuid.substring(0..7)
-            val updateTimeout = config.skull.timeoutOnNoTargets
 
             textResponse.append(
                 Component.translatable("skull.command.list.value",
@@ -77,7 +76,7 @@ class SkullCommand: BaseCommand() {
                     String.format("%.2f %.2f %.2f", skull.pos.x, skull.pos.y, skull.pos.z),
                     skull.level.dimensionTypeRegistration().registeredName,
                     if (skull.targetOptional.isPresent) Component.translatable("skull.command.list.target.player", skull.targetOptional.get().displayName.string)
-                    else if (skull.server.tickCount - skull.lastTargetUpdate < updateTimeout) Component.translatable("skull.command.list.target.idling")
+                    else if (skull.server.tickCount - skull.lastTargetUpdate < config.skullSection.timeoutOnNoTargets.get()) Component.translatable("skull.command.list.target.idling")
                     else Component.translatable("skull.command.list.target.searching")
                 )
             )

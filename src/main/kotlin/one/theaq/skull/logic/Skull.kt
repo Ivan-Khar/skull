@@ -37,7 +37,7 @@ class Skull(
     var recentlyKilled: MutableMap<UUID, Int> = mutableMapOf()
     var lastTargetUpdate: Int = 0
 
-    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skull.block.asItem())
+    val displayElement: ItemDisplayElement = ItemDisplayElement(config.skullSection.block.asItem())
     val elementHolder: ElementHolder = ElementHolder()
     val holderAttachment: HolderAttachment = ManualAttachment(elementHolder, level, this::pos)
 
@@ -52,7 +52,7 @@ class Skull(
     }
 
     fun tick() {
-        recentlyKilled.values.removeAll { tick -> server.tickCount - tick > config.skull.playerGracePeriod }
+        recentlyKilled.values.removeAll { tick -> server.tickCount - tick > config.skullSection.playerGracePeriod.get() }
 
         checkTarget()
         render()
@@ -71,10 +71,10 @@ class Skull(
         val targetDistance = targetDelta.length()
 
         val speed = when {
-            targetDistance in 16.0..64.0 -> SkullMath.map(targetDistance, 16.0, 64.0, config.skull.baseSpeed, config.skull.fastSpeed)
-            targetDistance in 64.0..512.0 -> SkullMath.map(targetDistance, 64.0, 512.0, config.skull.fastSpeed, config.skull.fasterSpeed)
-            targetDistance > 512.0 -> config.skull.fastestSpeed
-            else -> config.skull.baseSpeed
+            targetDistance in 16.0..64.0 -> SkullMath.map(targetDistance, 16.0, 64.0, config.skullSection.baseSpeed.get(), config.skullSection.fastSpeed.get())
+            targetDistance in 64.0..512.0 -> SkullMath.map(targetDistance, 64.0, 512.0, config.skullSection.fastSpeed.get(), config.skullSection.fasterSpeed.get())
+            targetDistance > 512.0 -> config.skullSection.fastestSpeed.get()
+            else -> config.skullSection.baseSpeed.get()
         }
 
         this.pos = pos.add(targetVector.scale(speed))
@@ -113,8 +113,7 @@ class Skull(
     }
 
     fun checkTarget() {
-        val updateTimeout = config.skull.timeoutOnNoTargets
-        if (server.tickCount - lastTargetUpdate < updateTimeout) return
+        if (server.tickCount - lastTargetUpdate < config.skullSection.timeoutOnNoTargets.get()) return
 
         if (targetOptional.isEmpty) {
             getNewTarget(SwitchTargetReason.EMPTY_TARGET)
@@ -131,14 +130,14 @@ class Skull(
 
     fun getNewTarget(reason: SwitchTargetReason) {
         lastTargetUpdate = server.tickCount
-        if (targetOptional.isPresent && config.skull.keepTarget) return
+        if (targetOptional.isPresent && config.skullSection.keepTarget.get()) return
 
         val playerTargets = level.getPlayers(EntitySelector.NO_SPECTATORS)
         playerTargets.removeAll { it.uuid in recentlyKilled.keys || !it.isAlive || manager.isTargetedBySkull(it) }
         if (playerTargets.isEmpty()) { clearTarget(); return }
 
         val newTarget: ServerPlayer = playerTargets.random()
-        if (config.messages.notifyOnTarget) sendSubTitle(newTarget, "skull.targeting.notification")
+        if (config.messagesSection.notifyOnTarget.get()) sendSubTitle(newTarget, "skull.targeting.notification")
         setTarget(newTarget)
     }
 
@@ -152,7 +151,7 @@ class Skull(
     }
 
     fun killEntity(target: LivingEntity) {
-        if (config.skull.disappearOnKill) manager.removeSkull(this)
+        if (config.skullSection.disappearOnKill.get()) manager.removeSkull(this)
 
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
         manager.addToKilledBySkull(target)
@@ -169,7 +168,7 @@ class Skull(
     }
 
     fun clearTarget() {
-        if (config.skull.keepTarget) return
+        if (config.skullSection.keepTarget.get()) return
 
         if (targetOptional.isPresent) {
             sendSubTitle(targetOptional.get(), "skull.targeting.cleared")

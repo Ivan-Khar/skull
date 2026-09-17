@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ServerPlayerMixin {
     @Inject(method = "setGameMode", at = @At("HEAD"), cancellable = true)
     private void blockGameModeSwitch(GameType mode, CallbackInfoReturnable<Boolean> cir) {
-        if (!Configs.INSTANCE.getCOMMON().getSkull().getBlocksSpectatorSwitch()) return;
+        if (!Configs.INSTANCE.getCOMMON().getSkullSection().getBlocksSpectatorSwitch().get()) return;
 
         var player = ((ServerPlayer) (Object) this);
         if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player) || mode != GameType.SPECTATOR) return;
@@ -33,7 +33,7 @@ public class ServerPlayerMixin {
 
     @Inject(method = "teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/server/level/ServerPlayer;", at = @At("HEAD"), cancellable = true)
     private void blockDimensionTeleport(TeleportTransition transition, CallbackInfoReturnable<ServerPlayer> cir) {
-        if (!Configs.INSTANCE.getCOMMON().getSkull().getBlocksDimensionSwitch()) return;
+        if (!Configs.INSTANCE.getCOMMON().getSkullSection().getBlocksDimensionSwitch().get()) return;
 
         var player = ((ServerPlayer) (Object) this);
         if (!SkullManager.Companion.getINSTANCE().isTargetedBySkull(player)) return;
@@ -48,7 +48,7 @@ public class ServerPlayerMixin {
 
     @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     private void blockSuicide(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
-        if (!Configs.INSTANCE.getCOMMON().getSkull().getBlocksSuicides()) return;
+        if (!Configs.INSTANCE.getCOMMON().getSkullSection().getBlocksSuicides().get()) return;
 
         var player = ((ServerPlayer) (Object) this);
         if (source.is(DamageTypes.GENERIC_KILL)) return;

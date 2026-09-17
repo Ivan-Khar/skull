@@ -61,10 +61,10 @@ class SkullManager {
     }
 
     fun onPlayerJoin(player: ServerPlayer) {
-        if (!config.spawn.spawnWhenEnoughPlayers) return
+        if (!config.spawnSection.spawnWhenEnoughPlayers.get()) return
 
         val server = player.level().server
-        if (server.playerCount < config.spawn.playerCountRequirement) return
+        if (server.playerCount < config.spawnSection.playerCountRequirement.get()) return
 
         val spawnDimensionRegistry = server.registryAccess().get(BuiltinDimensionTypes.OVERWORLD) //TODO: fix config
         if (spawnDimensionRegistry.isEmpty) return
@@ -73,9 +73,9 @@ class SkullManager {
         if (spawnDimension == null) return
 
         val skullsInDimension = skulls.filter { skull -> skull.level.dimension() == spawnDimension }
-        if (skullsInDimension.count() >= config.spawn.skullCount) return
+        if (skullsInDimension.count() >= config.spawnSection.skullCount.get()) return
 
-        val skullsToSpawn = config.spawn.skullCount - skulls.count()
+        val skullsToSpawn = config.spawnSection.skullCount.get() - skulls.count()
         for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos().above(10))
     }
 

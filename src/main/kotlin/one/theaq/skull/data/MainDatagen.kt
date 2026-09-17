@@ -3,10 +3,12 @@ package one.theaq.skull.data
 //? if fabric {
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
+import one.theaq.skull.data.fabric.LanguageProvider
 
 class MainDatagen : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
-
+        val dataPack = fabricDataGenerator.createPack()
+        dataPack.addProvider(::LanguageProvider)
     }
 }
 //?} else {

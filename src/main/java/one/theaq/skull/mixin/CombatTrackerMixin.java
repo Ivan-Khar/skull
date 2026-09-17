@@ -22,10 +22,10 @@ public class CombatTrackerMixin {
 	private void customSkullDeathMessage(CallbackInfoReturnable<Component> cir) {
 		if (!SkullManager.Companion.getINSTANCE().removeFromKilledBySkull(mob)) return;
 
-		var messagesConfig = Configs.INSTANCE.getCOMMON().getMessages();
-		var randomKillMessage = messagesConfig.getRandomKillMessage();
-		var killMessageNumber = (int) (Math.random() * messagesConfig.getAmountOfKillMessages());
-		var killMessage = randomKillMessage ? "skull.kill." + killMessageNumber : "skull.kill.0";
+		var messagesConfig = Configs.INSTANCE.getCOMMON().getMessagesSection();
+		var randomKillMessageEnabled = messagesConfig.getRandomKillMessage().get();
+		var killMessageNumber = (int) (Math.random() * messagesConfig.getAmountOfKillMessages().get());
+		var killMessage = randomKillMessageEnabled ? "skull.kill." + killMessageNumber : "skull.kill.0";
 		cir.setReturnValue(Component.translatable(killMessage, mob.getDisplayName()));
 	}
 }
