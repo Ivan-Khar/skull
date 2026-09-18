@@ -151,7 +151,13 @@ class Skull(
     }
 
     fun killEntity(target: LivingEntity) {
-        if (config.skullSection.disappearOnKill.get()) manager.removeSkull(this)
+        if (config.skullSection.disappearOnKill.get()) {
+            if (config.skullSection.respawnOnDisappear.get()) {
+                destroy(true)
+                resetPos()
+            }
+            else manager.removeSkull(this)
+        }
 
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
         manager.addToKilledBySkull(target)
@@ -177,16 +183,21 @@ class Skull(
         targetOptional = Optional.empty()
     }
 
+    fun resetPos() {
+        oldPos = Vec3(level.respawnData.pos())
+        pos = Vec3(level.respawnData.pos())
+    }
+
     /**
      *  Use [removeSkull(skull: Skull)][SkullManager.removeSkull] to remove skull
      *  removes skulls from holderAttachments
      */
-    fun destroy() {
+    fun destroy(keep: Boolean = false) {
         clearTarget()
         level.players().filter { it.eyePosition.distanceTo(pos) < 128 }.forEach { player ->
             level.sendParticles(player, ParticleTypes.ASH, false, false, this.pos.x, this.pos.y, this.pos.z, 50, 0.125, 0.125, 0.125, 0.025)
         }
-        holderAttachment.destroy()
+        if (!keep) holderAttachment.destroy()
     }
 
     enum class SwitchTargetReason {

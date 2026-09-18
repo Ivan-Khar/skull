@@ -21,7 +21,7 @@ class SkullManager {
     private val config = Configs.COMMON
 
     fun createSkull(level: ServerLevel, pos: BlockPos, target: Optional<LivingEntity> = Optional.empty()): Skull  {
-        return createSkull(level, Vec3(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()), target)
+        return createSkull(level, Vec3(pos), target)
     }
 
     fun createSkull(level: ServerLevel, pos: Vec3 = Vec3(0.0, 0.0, 0.0), target: Optional<LivingEntity> = Optional.empty()): Skull  {
