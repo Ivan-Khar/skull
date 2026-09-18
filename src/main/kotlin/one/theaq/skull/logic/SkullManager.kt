@@ -16,6 +16,8 @@ class SkullManager {
     private val markedForRemoval: MutableList<Skull> = mutableListOf()
     private val killedBySkull: MutableList<LivingEntity> = mutableListOf()
     private val entityTargeted: MutableList<LivingEntity> = mutableListOf()
+    private var spawnedSkulls: Boolean = false
+
     private val config = Configs.COMMON
 
     fun createSkull(level: ServerLevel, pos: BlockPos, target: Optional<LivingEntity> = Optional.empty()): Skull  {
@@ -62,6 +64,7 @@ class SkullManager {
     }
 
     fun onPlayerJoin(player: ServerPlayer) {
+        if (spawnedSkulls) return
         if (!config.spawnSection.spawnWhenEnoughPlayers.get()) return
 
         val server = player.level().server
@@ -77,6 +80,7 @@ class SkullManager {
 
         val skullsToSpawn = config.spawnSection.skullCount.get() - skulls.count()
         for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos().above(10))
+        spawnedSkulls = true
     }
 
     fun clear() {
@@ -84,6 +88,8 @@ class SkullManager {
         markedForRemoval.clear()
         killedBySkull.clear()
         entityTargeted.clear()
+
+        spawnedSkulls = false
     }
 
     fun addToKilledBySkull(entity: LivingEntity) {
