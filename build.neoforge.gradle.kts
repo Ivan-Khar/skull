@@ -1,4 +1,3 @@
-import dev.kikugie.fletching_table.annotation.MixinEnvironment
 import multiloader.utils.*
 
 plugins {
