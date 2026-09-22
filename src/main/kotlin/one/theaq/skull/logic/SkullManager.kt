@@ -79,7 +79,7 @@ class SkullManager {
         if (spawnDimension == null) return
 
         val skullsToSpawn = config.spawnSection.skullCount.get() - skulls.count()
-        for (skull in 1..skullsToSpawn) createSkull(spawnDimension, spawnDimension.respawnData.pos().above(10))
+        for (skull in 1..skullsToSpawn) createSkull(spawnDimension)
         spawnedSkulls = true
     }
 
