@@ -35,6 +35,8 @@
   "skull.common.skullSection.keepTarget.desc": "Skull keeps its target when it kills it",
   "skull.common.skullSection.playerGracePeriod": "Player grace period",
   "skull.common.skullSection.playerGracePeriod.desc": "After killing the player skull wont target them again for this amount of ticks (20 ticks = 1 second)",
+  "skull.common.skullSection.resetOnKill": "Reset on kill",
+  "skull.common.skullSection.resetOnKill.desc": "Skull teleports back to spawn and resets its target on kill",
   "skull.common.skullSection.speedGroup": "Speed",
   "skull.common.skullSection.speedGroup.desc": "Skull speed, scales linearly with distance",
   "skull.common.skullSection.timeoutOnNoTargets": "Timeout on no targets",

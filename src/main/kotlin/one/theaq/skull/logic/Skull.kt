@@ -26,7 +26,7 @@ import kotlin.math.sqrt
 class Skull(
     val manager: SkullManager,
     val level: ServerLevel,
-    var pos: Vec3,
+    var pos: Vec3 = Vec3(level.respawnData.pos().above(4)),
     var targetOptional: Optional<LivingEntity> = Optional.empty()
 ) {
     val server: MinecraftServer = level.server
@@ -151,19 +151,14 @@ class Skull(
     }
 
     fun killEntity(target: LivingEntity) {
-        if (config.skullSection.disappearOnKill.get()) {
-            if (config.skullSection.respawnOnDisappear.get()) {
-                destroy(true)
-                resetPos()
-            }
-            else manager.removeSkull(this)
-        }
-
         recentlyKilled += Pair(targetOptional.get().uuid, server.tickCount)
         manager.addToKilledBySkull(target)
         target.kill(level)
 
         clearTarget()
+
+        if (config.skullSection.resetOnKill.get()) reset()
+        if (config.skullSection.disappearOnKill.get()) manager.removeSkull(this)
     }
 
     fun setTarget(entity: LivingEntity) {
@@ -184,20 +179,25 @@ class Skull(
     }
 
     fun resetPos() {
-        oldPos = Vec3(level.respawnData.pos())
-        pos = Vec3(level.respawnData.pos())
+        oldPos = Vec3(level.respawnData.pos().above(4))
+        pos = Vec3(level.respawnData.pos().above(4))
+    }
+
+    fun reset() {
+        clearTarget()
+        level.players().filter { it.eyePosition.distanceTo(pos) < 128 }.forEach { player ->
+            level.sendParticles(player, ParticleTypes.ASH, false, false, this.pos.x, this.pos.y, this.pos.z, 50, 0.125, 0.125, 0.125, 0.025)
+        }
+        resetPos()
     }
 
     /**
      *  Use [removeSkull(skull: Skull)][SkullManager.removeSkull] to remove skull
      *  removes skulls from holderAttachments
      */
-    fun destroy(keep: Boolean = false) {
-        clearTarget()
-        level.players().filter { it.eyePosition.distanceTo(pos) < 128 }.forEach { player ->
-            level.sendParticles(player, ParticleTypes.ASH, false, false, this.pos.x, this.pos.y, this.pos.z, 50, 0.125, 0.125, 0.125, 0.025)
-        }
-        if (!keep) holderAttachment.destroy()
+    fun destroy() {
+        reset()
+        holderAttachment.destroy()
     }
 
     enum class SwitchTargetReason {

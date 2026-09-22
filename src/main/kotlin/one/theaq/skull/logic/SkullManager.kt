@@ -24,7 +24,7 @@ class SkullManager {
         return createSkull(level, Vec3(pos), target)
     }
 
-    fun createSkull(level: ServerLevel, pos: Vec3 = Vec3(0.0, 0.0, 0.0), target: Optional<LivingEntity> = Optional.empty()): Skull  {
+    fun createSkull(level: ServerLevel, pos: Vec3 = Vec3(level.respawnData.pos().above(5)), target: Optional<LivingEntity> = Optional.empty()): Skull  {
         val skull = Skull(this, level, pos, target)
 
         skulls += skull
